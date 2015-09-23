@@ -1,11 +1,10 @@
 package cl.uchile.dcc.cc5303;
 
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+
+import javax.swing.JFrame;
 
 /**
  * Created by franchoco on 9/20/15.
@@ -16,9 +15,11 @@ public class MainThread extends Thread {
     private final static int WIDTH = 800, HEIGHT = 600;
     private final static int UPDATE_RATE = 60;
     private final static int DX = 5;
-    private final static double DV = 0.1;
+    @SuppressWarnings("unused")
+	private final static double DV = 0.1;
     private final static int framesToNewBench = 100;
-    private final double vy = 0.3;
+    @SuppressWarnings("unused")
+	private final double vy = 0.3;
 
     private JFrame frame;
     private Board tablero;
@@ -144,7 +145,7 @@ public class MainThread extends Thread {
             tablero.repaint();
 
             try {
-                this.sleep(1000 / UPDATE_RATE);
+                Thread.sleep(1000 / UPDATE_RATE);
             } catch (InterruptedException ex) {
 
             }

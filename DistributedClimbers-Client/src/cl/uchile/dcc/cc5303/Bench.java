@@ -1,7 +1,6 @@
 package cl.uchile.dcc.cc5303;
 
-import java.awt.*;
-import java.util.Random;
+import java.awt.Graphics;
 
 /**
  * Created by sebablasko on 9/11/15.

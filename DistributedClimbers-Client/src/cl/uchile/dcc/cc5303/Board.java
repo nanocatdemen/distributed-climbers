@@ -1,15 +1,21 @@
 package cl.uchile.dcc.cc5303;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 
 /**
  * Created by sebablasko on 9/11/15.
  */
 public class Board extends Canvas {
 
-    public int width, height;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public int width, height;
 
     public Player p1, p2;
     public Bench[] bases;
