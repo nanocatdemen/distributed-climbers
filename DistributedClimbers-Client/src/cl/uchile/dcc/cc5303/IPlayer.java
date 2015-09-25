@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface IPlayer extends Remote{
+public interface IPlayer extends Remote {
 
 	void jump() throws RemoteException;
 

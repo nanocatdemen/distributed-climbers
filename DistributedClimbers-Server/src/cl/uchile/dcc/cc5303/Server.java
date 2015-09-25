@@ -10,8 +10,8 @@ public class Server {
 
 	public static void main(String[] args) {
 		try {
-            IPlayer banco = new Player();
-			Naming.rebind(urlServer, banco);
+            IPlayer player = new Player(0, 0);
+			Naming.rebind(urlServer, player);
 			System.out.println("Object published in "+urlServer);
 		} catch (RemoteException e) {
 			e.printStackTrace();
