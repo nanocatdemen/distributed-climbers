@@ -117,20 +117,20 @@ public class MainThread extends Thread {
             boolean levelsDown = false;
             for (Bench barra : tablero.bases) {
                 if (tablero.p1.hit(barra))
-                    tablero.p1.speed = 0.8;
+                    tablero.p1.setSpeed(0.8);
                 else if (tablero.p1.collide(barra)) {
-                    tablero.p1.speed = 0.01;
-                    tablero.p1.standUp = true;
+                    tablero.p1.setSpeed(0.01);
+                    tablero.p1.setStandUp(true);
                     if (barra.getLevel() > 2){
                         levelsDown = true;
                     }
                 }
 
                 if (tablero.p2.hit(barra))
-                    tablero.p2.speed = 0.8;
+                    tablero.p2.setSpeed(0.8);
                 else if (tablero.p2.collide(barra)) {
-                    tablero.p2.speed = 0.01;
-                    tablero.p2.standUp = true;
+                    tablero.p2.setSpeed(0.01);
+                    tablero.p2.setStandUp(true);
                     if (barra.getLevel() > 2){
                         levelsDown = true;
                     }
