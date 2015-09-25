@@ -1,3 +1,5 @@
+package cl.uchile.dcc.cc5303;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
