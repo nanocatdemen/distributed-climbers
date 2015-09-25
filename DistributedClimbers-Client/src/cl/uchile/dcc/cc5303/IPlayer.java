@@ -1,55 +1,57 @@
 package cl.uchile.dcc.cc5303;
 
 import java.awt.Graphics;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-public interface IPlayer {
+public interface IPlayer extends Remote{
 
-	void jump();
+	void jump() throws RemoteException;
 
-	void moveRight();
+	void moveRight() throws RemoteException;
 
-	void moveLeft();
+	void moveLeft() throws RemoteException;
 
-	void update(int dx);
+	void update(int dx) throws RemoteException;
 
-	void draw(Graphics g);
+	void draw(Graphics g) throws RemoteException;
 
 	String toString();
 
-	boolean collide(Bench b);
+	boolean collide(Bench b) throws RemoteException;
 
-	boolean hit(Bench b);
+	boolean hit(Bench b) throws RemoteException;
 
-	int top();
+	int top() throws RemoteException;
 
-	int left();
+	int left() throws RemoteException;
 
-	int bottom();
+	int bottom() throws RemoteException;
 
-	int right();
+	int right() throws RemoteException;
 
-	int getPosX();
+	int getPosX() throws RemoteException;
 
-	void setPosX(int posX);
+	void setPosX(int posX) throws RemoteException;
 
-	int getPosY();
+	int getPosY() throws RemoteException;
 
-	void setPosY(int posY);
+	void setPosY(int posY) throws RemoteException;
 
-	int getW();
+	int getW() throws RemoteException;
 
-	void setW(int w);
+	void setW(int w) throws RemoteException;
 
-	int getH();
+	int getH() throws RemoteException;
 
-	void setH(int h);
+	void setH(int h) throws RemoteException;
 
-	double getSpeed();
+	double getSpeed() throws RemoteException;
 
-	void setSpeed(double speed);
+	void setSpeed(double speed) throws RemoteException;
 
-	boolean isStandUp();
+	boolean isStandUp() throws RemoteException;
 
-	void setStandUp(boolean standUp);
+	void setStandUp(boolean standUp) throws RemoteException;
 
 }
