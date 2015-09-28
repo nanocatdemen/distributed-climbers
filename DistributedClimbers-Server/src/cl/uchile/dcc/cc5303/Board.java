@@ -5,15 +5,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
-/**
- * Created by sebablasko on 9/11/15.
- */
 public class Board extends Canvas {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3391617458338607181L;
 
 	public int width, height;
 
