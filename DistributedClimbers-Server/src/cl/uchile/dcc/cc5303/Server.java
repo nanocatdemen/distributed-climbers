@@ -10,7 +10,7 @@ public class Server {
 
 	public static void main(String[] args) {
 		try {
-            IPlayer player = new Player(0, 0);
+            IPlayer player = new Player(800/3, 550);
 			Naming.rebind(urlServer, player);
 			System.out.println("Object published in "+urlServer);
 		} catch (RemoteException e) {

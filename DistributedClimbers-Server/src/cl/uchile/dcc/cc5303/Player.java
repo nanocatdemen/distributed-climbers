@@ -1,14 +1,17 @@
 package cl.uchile.dcc.cc5303;
 
 import java.awt.*;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class Player implements IPlayer {
+public class Player extends UnicastRemoteObject implements IPlayer {
 
-    int posX, posY, w = 7, h = 10;
+	private static final long serialVersionUID = 3446923264217560693L;
+	int posX, posY, w = 7, h = 10;
     double speed = 0.4;
     public boolean standUp = false;
 
-    public Player(int x, int y){
+    public Player(int x, int y) throws RemoteException {
         this.posX = x;
         this.posY = y;
     }
@@ -42,10 +45,10 @@ public class Player implements IPlayer {
         g.fillRect(this.posX, this.posY, this.w, this.h);
     }
 
-	@Override
-    public String toString(){
-        return "player: position ("+this.posX+","+this.posY+")";
-    }
+//	@Override
+//    public String toString(){
+//        return "player: position ("+this.posX+","+this.posY+")";
+//    }
 
 	@Override
 	public boolean collide(Bench b){

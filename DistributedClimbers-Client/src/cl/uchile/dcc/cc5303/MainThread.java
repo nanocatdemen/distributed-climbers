@@ -2,6 +2,10 @@ package cl.uchile.dcc.cc5303;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -23,7 +27,8 @@ public class MainThread extends Thread {
 
     private JFrame frame;
     private Board tablero;
-    private Player player1, player2;
+    private IPlayer player1;
+    private Player player2;
 
     int frames = new Random().nextInt(2 * framesToNewBench);
 
@@ -48,9 +53,20 @@ public class MainThread extends Thread {
     public MainThread() {
         keys = new boolean[KeyEvent.KEY_LAST];
 
+        String urlServer = "rmi://localhost:1099/iceClimbers";
         //Jugadores
-        player1 = new Player(WIDTH/3, 550);
-        player2 = new Player(2*WIDTH/3, 550);
+        try {
+			player1 = (IPlayer) Naming.lookup(urlServer);
+		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        try {
+			player2 = new Player(2*WIDTH/3, 550);
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
         //resumen
         System.out.println(tablero);
@@ -90,13 +106,28 @@ public class MainThread extends Thread {
         while (true) { // Main loop
             //Check controls
             if (keys[KeyEvent.VK_UP]) {
-                tablero.p1.jump();
+                try {
+					tablero.p1.jump();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
             if (keys[KeyEvent.VK_RIGHT]) {
-                tablero.p1.moveRight();
+                try {
+					tablero.p1.moveRight();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
             if (keys[KeyEvent.VK_LEFT]) {
-                tablero.p1.moveLeft();
+                try {
+					tablero.p1.moveLeft();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
 
             if (keys[KeyEvent.VK_W]) {
@@ -110,21 +141,30 @@ public class MainThread extends Thread {
             }
 
             //update players
-            tablero.p1.update(DX);
+            try {
+				tablero.p1.update(DX);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             tablero.p2.update(DX);
 
             //update barras
             boolean levelsDown = false;
-            for (Bench barra : tablero.bases) {
-                if (tablero.p1.hit(barra))
-                    tablero.p1.setSpeed(0.8);
-                else if (tablero.p1.collide(barra)) {
-                    tablero.p1.setSpeed(0.01);
-                    tablero.p1.setStandUp(true);
-                    if (barra.getLevel() > 2){
-                        levelsDown = true;
-                    }
-                }
+	        for (Bench barra : tablero.bases) {
+	        	try {
+	                if (tablero.p1.hit(barra))
+	                    tablero.p1.setSpeed(0.8);
+	                else if (tablero.p1.collide(barra)) {
+	                    tablero.p1.setSpeed(0.01);
+	                    tablero.p1.setStandUp(true);
+	                    if (barra.getLevel() > 2){
+	                        levelsDown = true;
+	                    }
+	                }
+	            } catch (RemoteException e) {
+	            	e.printStackTrace();
+	            }
 
                 if (tablero.p2.hit(barra))
                     tablero.p2.setSpeed(0.8);

@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.rmi.RemoteException;
 
 public class Board extends Canvas {
 
@@ -11,7 +12,8 @@ public class Board extends Canvas {
 
 	public int width, height;
 
-    public Player p1, p2;
+    public IPlayer p1; 
+    public Player p2;
     public Bench[] bases;
     public Image img;
     public Graphics buffer;
@@ -21,12 +23,11 @@ public class Board extends Canvas {
         this.height = h;
     }
 
-    @Override
     public void update(Graphics g) { paint(g); }
 
-    @Override
     public void paint(Graphics g){
         if(buffer==null){
+        	System.out.println("?");
             img = createImage(getWidth(),getHeight() );
             buffer = img.getGraphics();
         }
@@ -34,8 +35,15 @@ public class Board extends Canvas {
         buffer.setColor(Color.black);
         buffer.fillRect(0, 0, getWidth(), getHeight());;
 
+        //Move rendering to client side -- p1.draw(buffer);
         buffer.setColor(Color.red);
-        p1.draw(buffer);
+        try {
+			buffer.fillRect(p1.getPosX(), p1.getPosY(), p1.getW(), p1.getH());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         buffer.setColor(Color.blue);
         p2.draw(buffer);
 
