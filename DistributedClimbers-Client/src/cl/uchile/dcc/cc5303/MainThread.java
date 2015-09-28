@@ -50,7 +50,7 @@ public class MainThread extends Thread {
             new Bench(50, 100, 10)
     };
 
-    public MainThread() {
+    public MainThread() throws RemoteException {
         keys = new boolean[KeyEvent.KEY_LAST];
 
         String urlServer = "rmi://localhost:1099/iceClimbers";
@@ -61,12 +61,7 @@ public class MainThread extends Thread {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-        try {
-			player2 = new Player(2*WIDTH/3, 550);
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		player2 = new Player(2*WIDTH/3, 550);
 
         //resumen
         System.out.println(tablero);
@@ -105,30 +100,19 @@ public class MainThread extends Thread {
     public void run() {
         while (true) { // Main loop
             //Check controls
-            if (keys[KeyEvent.VK_UP]) {
-                try {
+        	try {
+	            if (keys[KeyEvent.VK_UP]) {
 					tablero.p1.jump();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
-            if (keys[KeyEvent.VK_RIGHT]) {
-                try {
+	            }
+	            if (keys[KeyEvent.VK_RIGHT]) {
 					tablero.p1.moveRight();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
-            if (keys[KeyEvent.VK_LEFT]) {
-                try {
+	            }
+	            if (keys[KeyEvent.VK_LEFT]) {
 					tablero.p1.moveLeft();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
+	            }
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 
             if (keys[KeyEvent.VK_W]) {
                 tablero.p2.jump();

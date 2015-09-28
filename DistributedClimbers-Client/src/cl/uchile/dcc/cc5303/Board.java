@@ -23,11 +23,12 @@ public class Board extends Canvas {
         this.height = h;
     }
 
+    @Override
     public void update(Graphics g) { paint(g); }
 
-    public void paint(Graphics g){
+    @Override
+    public void paint(Graphics g) {
         if(buffer==null){
-        	System.out.println("?");
             img = createImage(getWidth(),getHeight() );
             buffer = img.getGraphics();
         }
@@ -35,12 +36,9 @@ public class Board extends Canvas {
         buffer.setColor(Color.black);
         buffer.fillRect(0, 0, getWidth(), getHeight());;
 
-        //Move rendering to client side -- p1.draw(buffer);
-        buffer.setColor(Color.red);
         try {
-			buffer.fillRect(p1.getPosX(), p1.getPosY(), p1.getW(), p1.getH());
+			Board.drawPlayer(buffer, p1, Color.red);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         
@@ -72,7 +70,8 @@ public class Board extends Canvas {
         }
     }
 
-
-
-
+    static void drawPlayer(Graphics buffer, IPlayer p, Color color) throws RemoteException {
+    	buffer.setColor(color);
+		buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
+    }
 }
