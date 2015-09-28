@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class Board extends Canvas {
 
@@ -12,66 +13,70 @@ public class Board extends Canvas {
 
 	public int width, height;
 
-    public IPlayer p1; 
-    public Player p2;
-    public Bench[] bases;
-    public Image img;
-    public Graphics buffer;
+	//    public IPlayer p1; 
+	//    public Player p2;
+	public ArrayList<IPlayer> players;
+	public Bench[] bases;
+	public Image img;
+	public Graphics buffer;
 
-    public Board(int w, int h){
-        this.width = w;
-        this.height = h;
-    }
+	public Board(int w, int h){
+		this.width = w;
+		this.height = h;
+	}
 
-    @Override
-    public void update(Graphics g) { paint(g); }
+	@Override
+	public void update(Graphics g) { paint(g); }
 
-    @Override
-    public void paint(Graphics g) {
-        if(buffer==null){
-            img = createImage(getWidth(),getHeight() );
-            buffer = img.getGraphics();
-        }
-
-        buffer.setColor(Color.black);
-        buffer.fillRect(0, 0, getWidth(), getHeight());;
-
-        try {
-			Board.drawPlayer(buffer, p1, Color.red);
-		} catch (RemoteException e) {
-			e.printStackTrace();
+	@Override
+	public void paint(Graphics g) {
+		if(buffer==null){
+			img = createImage(getWidth(),getHeight() );
+			buffer = img.getGraphics();
 		}
-        
-        buffer.setColor(Color.blue);
-        p2.draw(buffer);
+		
+		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
 
-        buffer.setColor(Color.white);
-        for(Bench base : bases){
-            base.draw(buffer);
-        }
+		buffer.setColor(Color.black);
+		buffer.fillRect(0, 0, getWidth(), getHeight());
 
-        g.drawImage(img, 0, 0, null);
-    }
+		int i = 0;
+		for(IPlayer player: players) {
+			try {
+				Board.drawPlayer(buffer, player, colors[i]);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			i++;
+		}
 
-    @Override
-    public String toString(){
-        String ret = "Tablero: dimensions " + this.width + "x" + this.height + "\n";
-        ret += p1.toString() + "\n" + p2.toString();
-        return ret;
-    }
+		buffer.setColor(Color.white);
+		for(Bench base : bases){
+			base.draw(buffer);
+		}
 
-    public void setBenches(Bench[] benches) {
-        this.bases = benches;
-    }
+		g.drawImage(img, 0, 0, null);
+	}
 
-    public void levelsDown() {
-        for(Bench base: bases) {
-            base.levelDown();
-        }
-    }
+	//    @Override
+	//    public String toString(){
+	//        String ret = "Tablero: dimensions " + this.width + "x" + this.height + "\n";
+	//        ret += p1.toString() + "\n" + p2.toString();
+	//        return ret;
+	//    }
 
-    static void drawPlayer(Graphics buffer, IPlayer p, Color color) throws RemoteException {
-    	buffer.setColor(color);
+	public void setBenches(Bench[] benches) {
+		this.bases = benches;
+	}
+
+	public void levelsDown() {
+		for(Bench base: bases) {
+			base.levelDown();
+		}
+	}
+
+	static void drawPlayer(Graphics buffer, IPlayer p, Color color) throws RemoteException {
+		buffer.setColor(color);
 		buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
-    }
+	}
 }
