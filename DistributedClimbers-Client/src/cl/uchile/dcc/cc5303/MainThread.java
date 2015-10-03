@@ -11,9 +11,6 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
-/**
- * Created by franchoco on 9/20/15.
- */
 public class MainThread extends Thread {
     public boolean[] keys;
     private final static String TITLE = "Juego - CC5303";
@@ -68,13 +65,8 @@ public class MainThread extends Thread {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "/player" + i));
 			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-//		player2 = new Player(2*WIDTH/3, 550);
-
-        //resumen
-        System.out.println(tablero);
 
         frame = new JFrame(TITLE);
         frame.setVisible(true);
@@ -111,7 +103,6 @@ public class MainThread extends Thread {
             //Check controls
         	try {
 	            if (keys[KeyEvent.VK_UP]) {
-	            	//TODO: Si ta mal ver aca
 					myPlayer.jump();
 	            }
 	            if (keys[KeyEvent.VK_RIGHT]) {
@@ -123,25 +114,13 @@ public class MainThread extends Thread {
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
-//
-//            if (keys[KeyEvent.VK_W]) {
-//                tablero.p2.jump();
-//            }
-//            if (keys[KeyEvent.VK_D]) {
-//                tablero.p2.moveRight();
-//            }
-//            if (keys[KeyEvent.VK_A]) {
-//                tablero.p2.moveLeft();
-//            }
 
-            //update players
+        	//update players
             try {
             	myPlayer.update(DX);
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-           // tablero.p2.update(DX);
 
             //update barras
             boolean levelsDown = false;
@@ -159,16 +138,6 @@ public class MainThread extends Thread {
 	            } catch (RemoteException e) {
 	            	e.printStackTrace();
 	            }
-
-//                if (tablero.p2.hit(barra))
-//                    tablero.p2.setSpeed(0.8);
-//                else if (tablero.p2.collide(barra)) {
-//                    tablero.p2.setSpeed(0.01);
-//                    tablero.p2.setStandUp(true);
-//                    if (barra.getLevel() > 2){
-//                        levelsDown = true;
-//                    }
-//                }
             }
 
             // Update board
@@ -184,7 +153,5 @@ public class MainThread extends Thread {
 
             }
         }
-
-
     }
 }
