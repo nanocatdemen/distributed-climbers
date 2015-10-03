@@ -13,7 +13,7 @@ public class Server {
 		int width = 800, height = 600;
 		try {
 			ArrayList<IPlayer> players = new ArrayList<IPlayer>();
-			for(int i = 0; i < 4; i++) {
+			for(int i = 0; i < 2; i++) {
 				//TODO: ver bien el width
 				players.add(new Player(width/(i+1)-50,height-50));
 			}
@@ -23,7 +23,7 @@ public class Server {
 				System.out.println("Player published in server: " + urlServer + "/player" + i);
 				i++;
 			}
-            IGestor gestor = new Gestor(4);
+            IGestor gestor = new Gestor(2);
             Naming.rebind(urlServer + "/gestor", gestor);
             System.out.println("Gestor published in server: " + urlServer + "/gestor");
 		} catch (RemoteException e) {

@@ -8,7 +8,7 @@ public class Main {
     static final public int ANCHO = 800;
     static final public int ALTO = 600;
 
-    public static void main(String[] args) throws RemoteException{
+    public static void main(String[] args) throws RemoteException {
         System.out.println("Iniciando Juego de SSDD...");
 
         MainThread m = new MainThread();
