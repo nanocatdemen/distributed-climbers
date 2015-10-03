@@ -13,8 +13,6 @@ public class Board extends Canvas {
 
 	public int width, height;
 
-	//    public IPlayer p1; 
-	//    public Player p2;
 	public ArrayList<IPlayer> players;
 	public Bench[] bases;
 	public Image img;
