@@ -9,6 +9,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	private static final long serialVersionUID = 1L;
 	ArrayList<Boolean> taken;
 	protected Mutex lock;
+	int nbOfPlayers;
 	
 	public Gestor(int players) throws RemoteException {
 		taken = new ArrayList<Boolean>();
@@ -16,6 +17,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 			taken.add(false);
 		}
 		lock = new Mutex();
+		nbOfPlayers = players;
 	}
 
 	@Override
@@ -33,7 +35,6 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	@Override
 	public boolean areAllTaken() {
 		boolean ret = true;
-		System.out.println(this.taken);
 		for(boolean b : this.taken) {
 			ret = ret && b;
 		}
@@ -56,6 +57,11 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		synchronized(this.lock){
 			this.lock.notifyAll();
 		}
+	}
+	
+	@Override
+	public int getNbOfPlayers() {
+		return nbOfPlayers;
 	}
 
 }

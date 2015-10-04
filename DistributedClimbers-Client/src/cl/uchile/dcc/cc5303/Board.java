@@ -2,6 +2,7 @@ package cl.uchile.dcc.cc5303;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.rmi.RemoteException;
@@ -76,5 +77,10 @@ public class Board extends Canvas {
 	static void drawPlayer(Graphics buffer, IPlayer p, Color color) throws RemoteException {
 		buffer.setColor(color);
 		buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
+		if(p.isWaiting()) {
+			buffer.setFont(new Font("ComicSans", Font.PLAIN, 20));
+			buffer.setColor(Color.white);
+			buffer.drawString("Waiting", p.getPosX() - 35, p.getPosY() - 3);
+		}
 	}
 }

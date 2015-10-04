@@ -53,5 +53,9 @@ public interface IPlayer extends Remote {
 	boolean isStandUp() throws RemoteException;
 
 	void setStandUp(boolean standUp) throws RemoteException;
+	
+	public boolean isWaiting() throws RemoteException;
+
+	public void setWaiting(boolean waiting) throws RemoteException;
 
 }

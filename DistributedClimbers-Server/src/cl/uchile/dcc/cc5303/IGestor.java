@@ -12,5 +12,7 @@ public interface IGestor extends Remote {
 	void doNotifyAll() throws RemoteException;
 
 	void doWait() throws RemoteException;
+
+	int getNbOfPlayers() throws RemoteException;
 	
 }

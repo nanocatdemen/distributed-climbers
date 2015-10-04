@@ -59,7 +59,7 @@ public class MainThread extends Thread {
         	gestor = (IGestor) Naming.lookup(urlServer + "/gestor");
         	int myPlayerNumber = gestor.giffPlayer();
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "/player" + myPlayerNumber);
-			for(int i = 0; i < 2; i++) {
+			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "/player" + i));
 			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
@@ -97,21 +97,18 @@ public class MainThread extends Thread {
 
     @Override
     public void run() {
-		System.out.println("Call me plz");
 		try {
 			if(gestor.areAllTaken()) {
-				System.out.println("Notifing all!");
 				gestor.doNotifyAll();
-				System.out.println("All notified!");
+				myPlayer.setWaiting(false);
 			} else {
-				System.out.println("Waiting!");
+				// TODO: if possible, notify the connected players to update the state
+				myPlayer.setWaiting(false);
 				gestor.doWait();
-				System.out.println("Stopped waiting!");
 			}
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}
-		System.out.println("You called!");
         while (true) { // Main loop
             //Check controls
         	try {

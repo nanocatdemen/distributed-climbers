@@ -9,7 +9,8 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	private static final long serialVersionUID = 3446923264217560693L;
 	int posX, posY, w = 7, h = 10;
     double speed = 0.4;
-    public boolean standUp = false;
+    boolean standUp = false;
+    boolean waiting = true;
 
     public Player(int x, int y) throws RemoteException {
         this.posX = x;
@@ -138,5 +139,15 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void setStandUp(boolean standUp) {
 		this.standUp = standUp;
+	}
+
+	@Override
+	public boolean isWaiting() {
+		return waiting;
+	}
+
+	@Override
+	public void setWaiting(boolean waiting) {
+		this.waiting = waiting;
 	}
 }
