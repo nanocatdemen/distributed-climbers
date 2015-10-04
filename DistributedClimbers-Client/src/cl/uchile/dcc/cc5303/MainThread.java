@@ -152,7 +152,12 @@ public class MainThread extends Thread {
 
             // Update board
             if (levelsDown) {
-                tablero.levelsDown();
+                try {
+					tablero.levelsDown();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
 
             tablero.repaint();

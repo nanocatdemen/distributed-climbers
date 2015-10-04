@@ -68,9 +68,12 @@ public class Board extends Canvas {
 		this.bases = benches;
 	}
 
-	public void levelsDown() {
+	public void levelsDown() throws RemoteException {
 		for(Bench base: bases) {
 			base.levelDown();
+		}
+		for(IPlayer player: players){
+			player.down();
 		}
 	}
 

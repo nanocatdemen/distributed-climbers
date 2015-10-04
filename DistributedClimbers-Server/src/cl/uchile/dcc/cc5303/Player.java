@@ -150,4 +150,10 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	public void setWaiting(boolean waiting) {
 		this.waiting = waiting;
 	}
+
+	@Override
+	public void down(){
+		// TODO Auto-generated method stub
+		this.posY+=100;
+	}
 }

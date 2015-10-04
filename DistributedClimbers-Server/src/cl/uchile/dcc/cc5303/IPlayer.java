@@ -58,4 +58,6 @@ public interface IPlayer extends Remote {
 
 	public void setWaiting(boolean waiting) throws RemoteException;
 
+	public void down() throws RemoteException;
+
 }
