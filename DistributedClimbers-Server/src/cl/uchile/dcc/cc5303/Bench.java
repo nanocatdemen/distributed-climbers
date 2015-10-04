@@ -21,10 +21,6 @@ public class Bench implements Serializable{
         this.posY = 600 - level*100 - this.h;
     }
 
-    public void draw(Graphics g){
-        g.fillRect(this.posX, this.posY, this.w, this.h);
-    }
-
     public int top() {
         return this.posY;
     }

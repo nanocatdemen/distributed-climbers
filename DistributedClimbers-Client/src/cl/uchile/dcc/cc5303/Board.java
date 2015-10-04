@@ -51,7 +51,7 @@ public class Board extends Canvas {
 
 		buffer.setColor(Color.white);
 		for(Bench base : bases){
-			base.draw(buffer);
+			buffer.fillRect(base.posX, base.posY, base.w, base.h);
 		}
 
 		g.drawImage(img, 0, 0, null);
