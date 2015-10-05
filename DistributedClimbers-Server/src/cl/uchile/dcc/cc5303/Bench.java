@@ -60,6 +60,9 @@ public class Bench extends UnicastRemoteObject implements Serializable, IBench{
     @Override
 	public void levelDown() {
         this.level--;
+        if (level <0){
+        	level = 10;
+        }
         this.posY = 600 - level*100 - this.h;
     }
 

@@ -27,7 +27,8 @@ public class MainThread extends Thread {
 	private Board tablero;
 	private IPlayer myPlayer;
 	private ArrayList<IPlayer> allPlayers;
-	private ArrayList<IBench> allBenches;
+	//private ArrayList<IBench> allBenches;
+	private IBenchManager benchManager;
 	private IGestor gestor;
 
 	int frames = new Random().nextInt(2 * framesToNewBench);
@@ -35,10 +36,10 @@ public class MainThread extends Thread {
 	public MainThread() throws RemoteException {
 		keys = new boolean[KeyEvent.KEY_LAST];
 
-		String urlServer = "rmi://localhost:1099/iceClimbers";
+		String urlServer = "rmi://172.17.69.201:1099/iceClimbers";
 		//Jugadores
 		allPlayers = new ArrayList<IPlayer>();
-		allBenches = new ArrayList<IBench>();
+		//allBenches = new ArrayList<IBench>();
 		try {
 			gestor = (IGestor) Naming.lookup(urlServer + "/gestor");
 			int myPlayerNumber = gestor.giffPlayer();
@@ -46,9 +47,7 @@ public class MainThread extends Thread {
 			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "/player" + i));
 			}
-			for(int i = 0; i < gestor.getNbOfBenches(); i++){
-				allBenches.add((IBench) Naming.lookup(urlServer + "/bench" + i));
-			}
+			benchManager = (IBenchManager) Naming.lookup(urlServer + "/benchmanager"); 
 		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
 			e1.printStackTrace();
 		}
@@ -59,7 +58,7 @@ public class MainThread extends Thread {
 
 		tablero = new Board(WIDTH, HEIGHT);
 		tablero.players = allPlayers;
-		tablero.bases = allBenches;
+		tablero.bases = benchManager;
 
 		frame.add(tablero);
 		tablero.setSize(WIDTH, HEIGHT);
@@ -121,20 +120,25 @@ public class MainThread extends Thread {
 
 			//update barras
 			boolean levelsDown = false;
-			for (IBench barra : tablero.bases) {
-				try {
-					if (myPlayer.hitBench(barra))
-						myPlayer.setSpeed(0.8);
-					else if (myPlayer.collideBench(barra)) {
-						myPlayer.setSpeed(0.01);
-						myPlayer.setStandUp(true);
-						if (barra.getLevel() > 2){
-							levelsDown = true;
+			try {
+				for (IBench barra : tablero.bases.getBenches()) {
+					try {
+						if (myPlayer.hitBench(barra))
+							myPlayer.setSpeed(0.8);
+						else if (myPlayer.collideBench(barra)) {
+							myPlayer.setSpeed(0.01);
+							myPlayer.setStandUp(true);
+							if (barra.getLevel() > 2){
+								levelsDown = true;
+							}
 						}
+					} catch (RemoteException e) {
+						e.printStackTrace();
 					}
-				} catch (RemoteException e) {
-					e.printStackTrace();
 				}
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
 			for (IPlayer player: tablero.players){
