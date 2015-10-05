@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class Server{
 	
 	public static final String URLSERVER = "rmi://localhost:1099/iceClimbers";
-	public static final int NB_OF_PLAYERS = 2;
+	public static final int NB_OF_PLAYERS = 4;
 	private static int[][] benches  = {
-			//TODO ver como generar estas cosas de manera m{as aleatoria y bonita
+			//TODO ver como generar estas cosas de manera más aleatoria y bonita
             {0, 800, 0},
             {100, 200, 1},
             {400, 200, 1},
@@ -32,8 +32,7 @@ public class Server{
 		try {
 			ArrayList<IPlayer> players = new ArrayList<IPlayer>();
 			for(int i = 0; i < NB_OF_PLAYERS; i++) {
-				//TODO: ver bien el width
-				players.add(new Player(width/(i+1)-50,height-50));
+				players.add(new Player(100+width/4*(i),height-50));
 			}
 			int i = 0;
 			for(IPlayer player : players) {
