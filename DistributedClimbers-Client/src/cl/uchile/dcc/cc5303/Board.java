@@ -35,6 +35,7 @@ public class Board extends Canvas {
 		}
 		
 		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
+		String[] names = {"popo", "nana", "meme", "lili"};
 
 		buffer.setColor(Color.black);
 		buffer.fillRect(0, 0, getWidth(), getHeight());
@@ -42,7 +43,7 @@ public class Board extends Canvas {
 		int i = 0;
 		for(IPlayer player: players) {
 			try {
-				Board.drawPlayer(buffer, player, colors[i]);
+				Board.drawPlayer(buffer, player, colors[i], names[i]);
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -82,13 +83,16 @@ public class Board extends Canvas {
 		}
 	}
 
-	static void drawPlayer(Graphics buffer, IPlayer p, Color color) throws RemoteException {
+	static void drawPlayer(Graphics buffer, IPlayer p, Color color, String name) throws RemoteException {
 		buffer.setColor(color);
 		buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
+		buffer.setFont(new Font("ComicSans", Font.PLAIN, 10));
+		buffer.setColor(Color.white);
+		buffer.drawString(name, p.getPosX() - 5, p.getPosY() - 3);
 		if(p.isWaiting()) {
 			buffer.setFont(new Font("ComicSans", Font.PLAIN, 20));
 			buffer.setColor(Color.white);
-			buffer.drawString("Waiting", p.getPosX() - 35, p.getPosY() - 3);
+			buffer.drawString("Waiting", p.getPosX() - 35, p.getPosY() - 13);
 		}
 	}
 }
