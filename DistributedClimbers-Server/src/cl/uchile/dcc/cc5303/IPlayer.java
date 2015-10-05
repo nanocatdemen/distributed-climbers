@@ -18,9 +18,9 @@ public interface IPlayer extends Remote {
 
 	//String toString() throws RemoteException;
 
-	boolean collide(Bench b) throws RemoteException;
+	boolean collide(IBench b) throws RemoteException;
 
-	boolean hit(Bench b) throws RemoteException;
+	boolean hit(IBench b) throws RemoteException;
 
 	int top() throws RemoteException;
 

@@ -15,4 +15,6 @@ public interface IGestor extends Remote {
 
 	int getNbOfPlayers() throws RemoteException;
 	
+	int getNbOfBenches() throws RemoteException;
+	
 }

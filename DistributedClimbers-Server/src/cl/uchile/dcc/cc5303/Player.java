@@ -52,12 +52,12 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 //    }
 
 	@Override
-	public boolean collide(Bench b){
+	public boolean collide(IBench b) throws RemoteException{
         return Math.abs(bottom() - b.top()) < 5 && right() <= b.right() && left() >= b.left();
     }
 
 	@Override 
-	public boolean hit(Bench b){
+	public boolean hit(IBench b) throws RemoteException{
         return Math.abs(top() - b.bottom()) < 5 && right() <= b.right() && left() >= b.left();
     }
 
@@ -153,7 +153,6 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 
 	@Override
 	public void down(){
-		// TODO Auto-generated method stub
 		this.posY+=100;
 	}
 }

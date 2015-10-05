@@ -1,9 +1,10 @@
 package cl.uchile.dcc.cc5303;
 
-import java.awt.Graphics;
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class Bench implements Serializable{
+public class Bench extends UnicastRemoteObject implements Serializable, IBench{
     /**
 	 * 
 	 */
@@ -12,7 +13,7 @@ public class Bench implements Serializable{
     int w, h;
     int level;
 
-    public Bench(int x, int width, int level){
+    public Bench(int x, int width, int level) throws RemoteException{
         this.w = width;
         this.h = 20;
         this.posX = x;
@@ -21,28 +22,52 @@ public class Bench implements Serializable{
         this.posY = 600 - level*100 - this.h;
     }
 
-    public int top() {
+    /* (non-Javadoc)
+	 * @see cl.uchile.dcc.cc5303.IBench#top()
+	 */
+    @Override
+	public int top() {
         return this.posY;
     }
 
-    public int left() {
+    /* (non-Javadoc)
+	 * @see cl.uchile.dcc.cc5303.IBench#left()
+	 */
+    @Override
+	public int left() {
         return this.posX;
     }
 
-    public int bottom() {
+    /* (non-Javadoc)
+	 * @see cl.uchile.dcc.cc5303.IBench#bottom()
+	 */
+    @Override
+	public int bottom() {
         return this.posY + this.h;
     }
 
-    public int right() {
+    /* (non-Javadoc)
+	 * @see cl.uchile.dcc.cc5303.IBench#right()
+	 */
+    @Override
+	public int right() {
         return this.posX + this.w;
     }
 
-    public void levelDown() {
+    /* (non-Javadoc)
+	 * @see cl.uchile.dcc.cc5303.IBench#levelDown()
+	 */
+    @Override
+	public void levelDown() {
         this.level--;
         this.posY = 600 - level*100 - this.h;
     }
 
-    public int getLevel() {
+    /* (non-Javadoc)
+	 * @see cl.uchile.dcc.cc5303.IBench#getLevel()
+	 */
+    @Override
+	public int getLevel() {
         return level;
     }
 

@@ -27,27 +27,28 @@ public class MainThread extends Thread {
     private Board tablero;
     private IPlayer myPlayer;
     private ArrayList<IPlayer> allPlayers;
+    private ArrayList<IBench> allBenches;
     private IGestor gestor;
     
     int frames = new Random().nextInt(2 * framesToNewBench);
 
-    private Bench[] benches = {
-            new Bench(0, 800, 0),
-            new Bench(100, 200, 1),
-            new Bench(400, 200, 1),
-            new Bench(300, 100, 2),
-            new Bench(600, 200, 2),
-            new Bench(150, 200, 3),
-            new Bench(700, 100, 3),
-            new Bench(75, 200, 4),
-            new Bench(350, 350, 4),
-            new Bench(200, 200, 5),
-            new Bench(400, 400, 6),
-            new Bench(200, 400, 7),
-            new Bench(150, 200, 8),
-            new Bench(75, 100, 9),
-            new Bench(50, 100, 10)
-    };
+//    private Bench[] benches = {
+//            new Bench(0, 800, 0),
+//            new Bench(100, 200, 1),
+//            new Bench(400, 200, 1),
+//            new Bench(300, 100, 2),
+//            new Bench(600, 200, 2),
+//            new Bench(150, 200, 3),
+//            new Bench(700, 100, 3),
+//            new Bench(75, 200, 4),
+//            new Bench(350, 350, 4),
+//            new Bench(200, 200, 5),
+//            new Bench(400, 400, 6),
+//            new Bench(200, 400, 7),
+//            new Bench(150, 200, 8),
+//            new Bench(75, 100, 9),
+//            new Bench(50, 100, 10)
+//    };
 
     public MainThread() throws RemoteException {
         keys = new boolean[KeyEvent.KEY_LAST];
@@ -55,12 +56,16 @@ public class MainThread extends Thread {
         String urlServer = "rmi://localhost:1099/iceClimbers";
         //Jugadores
         allPlayers = new ArrayList<IPlayer>();
+        allBenches = new ArrayList<IBench>();
         try {
         	gestor = (IGestor) Naming.lookup(urlServer + "/gestor");
         	int myPlayerNumber = gestor.giffPlayer();
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "/player" + myPlayerNumber);
 			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "/player" + i));
+			}
+			for(int i = 0; i < gestor.getNbOfBenches(); i++){
+				allBenches.add((IBench) Naming.lookup(urlServer + "/bench" + i));
 			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
 			e1.printStackTrace();
@@ -72,7 +77,7 @@ public class MainThread extends Thread {
 
         tablero = new Board(WIDTH, HEIGHT);
         tablero.players = allPlayers;
-        tablero.bases = benches;
+        tablero.bases = allBenches;
 
         frame.add(tablero);
         tablero.setSize(WIDTH, HEIGHT);
@@ -134,7 +139,7 @@ public class MainThread extends Thread {
 
             //update barras
             boolean levelsDown = false;
-	        for (Bench barra : tablero.bases) {
+	        for (IBench barra : tablero.bases) {
 	        	try {
 	                if (myPlayer.hit(barra))
 	                	myPlayer.setSpeed(0.8);
@@ -155,7 +160,6 @@ public class MainThread extends Thread {
                 try {
 					tablero.levelsDown();
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             }

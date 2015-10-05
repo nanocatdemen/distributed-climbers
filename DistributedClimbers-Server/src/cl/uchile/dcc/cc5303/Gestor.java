@@ -10,14 +10,16 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	ArrayList<Boolean> taken;
 	protected Mutex lock;
 	int nbOfPlayers;
+	int nbOfBenches;
 	
-	public Gestor(int players) throws RemoteException {
+	public Gestor(int players, int benches) throws RemoteException {
 		taken = new ArrayList<Boolean>();
 		for(int i = 0; i < players; i++) {
 			taken.add(false);
 		}
 		lock = new Mutex();
 		nbOfPlayers = players;
+		nbOfBenches = benches;
 	}
 
 	@Override
@@ -62,6 +64,11 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	@Override
 	public int getNbOfPlayers() {
 		return nbOfPlayers;
+	}
+
+	@Override
+	public int getNbOfBenches() {
+		return nbOfBenches;
 	}
 
 }
