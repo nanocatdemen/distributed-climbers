@@ -2,6 +2,7 @@ package cl.uchile.dcc.cc5303;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public interface IGestor extends Remote {
 
@@ -16,5 +17,7 @@ public interface IGestor extends Remote {
 	int getNbOfPlayers() throws RemoteException;
 	
 	int getNbOfBenches() throws RemoteException;
+
+	boolean gameOver(ArrayList<IPlayer> allPlayers) throws RemoteException;
 	
 }

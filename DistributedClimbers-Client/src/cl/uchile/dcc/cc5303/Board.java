@@ -18,10 +18,12 @@ public class Board extends Canvas {
 	public IBenchManager bases;
 	public Image img;
 	public Graphics buffer;
+	public boolean isGameOver;
 
 	public Board(int w, int h){
 		this.width = w;
 		this.height = h;
+		isGameOver = false;
 	}
 
 	@Override
@@ -61,6 +63,8 @@ public class Board extends Canvas {
 		}
 
 		g.drawImage(img, 0, 0, null);
+
+		if (isGameOver) drawGameOver(buffer);
 	}
 
 	//    @Override
@@ -88,11 +92,17 @@ public class Board extends Canvas {
 		buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
 		buffer.setFont(new Font("ComicSans", Font.PLAIN, 10));
 		buffer.setColor(Color.white);
-		buffer.drawString(name, p.getPosX() - 5, p.getPosY() - 3);
+		buffer.drawString(name + " - " + p.getLives()+"", p.getPosX() - 5, p.getPosY() - 3);
 		if(p.isWaiting()) {
 			buffer.setFont(new Font("ComicSans", Font.PLAIN, 20));
 			buffer.setColor(Color.white);
 			buffer.drawString("Waiting", p.getPosX() - 35, p.getPosY() - 13);
 		}
+	}
+
+	static void drawGameOver(Graphics buffer) {
+		buffer.setFont(new Font("ComicSans", Font.PLAIN, 50));
+		buffer.setColor(Color.white);
+		buffer.drawString("GAME OVER", WIDTH, HEIGHT/2-100);
 	}
 }

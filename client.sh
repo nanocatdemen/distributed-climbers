@@ -7,4 +7,4 @@ mv DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.class DistributedClimbe
 # Run client
 echo "Starting client..."
 cd DistributedClimbers-Client/bin
-java cl.uchile.dcc.cc5303.Main
+java -Djava.rmi.server.hostname=172.17.69.201 cl.uchile.dcc.cc5303.Main

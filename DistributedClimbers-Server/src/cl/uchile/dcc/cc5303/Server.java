@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class Server{
 	
-	public static final String URLSERVER = "rmi://172.17.69.201:1099/iceClimbers";
-	public static final int NB_OF_PLAYERS = 1;
+	public static String URLSERVER;
+	public static int NB_OF_PLAYERS;
 	private static int[][] benches  = {
 			//TODO ver como generar estas cosas de manera más aleatoria y bonita
-            {0, 350, 0},
-            {500, 350, 0},
+            {0, 410, 0},
+            {500, 400, 0},
             {100, 200, 1},
             {400, 200, 1},
             {300, 100, 2},
@@ -29,6 +29,8 @@ public class Server{
             {350, 100, 10}
     };
 	public static void main(String[] args) {
+		URLSERVER = "rmi://" + args[0] + ":1099/iceClimbers";
+		NB_OF_PLAYERS = Integer.parseInt(args[1]);
 		int width = 800, height = 600;
 		try {
 			ArrayList<IPlayer> players = new ArrayList<IPlayer>();
@@ -45,8 +47,6 @@ public class Server{
 			for(i = 0; i < benches.length; i++){
 				IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
 				manager.add(bench);
-//				Naming.rebind(URLSERVER + "/bench" + i, bench);
-//				System.out.println("Benche published in server: " + URLSERVER + "/bench" + i);
 			}
 			Naming.rebind(URLSERVER + "/benchmanager", manager);
 			System.out.println("Benche manager  published in server: " + URLSERVER + "/benchmanager");

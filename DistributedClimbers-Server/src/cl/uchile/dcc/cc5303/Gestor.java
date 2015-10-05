@@ -71,4 +71,15 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		return nbOfBenches;
 	}
 
+	@Override
+	public boolean gameOver(ArrayList<IPlayer> allPlayers)
+			throws RemoteException {
+		int cnt = 0;
+		for(IPlayer player : allPlayers){
+			if(player.getLives()<0){
+				cnt++;
+			}
+		}
+		return cnt==(allPlayers.size()-1);
+	}
 }

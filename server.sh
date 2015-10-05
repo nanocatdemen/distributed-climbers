@@ -11,4 +11,4 @@ echo "Starting rmiregistry..."
 rmiregistry &
 # Run server
 echo "Starting server..."
-java cl.uchile.dcc.cc5303.Server
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Server $1 $2

@@ -7,79 +7,80 @@ import java.rmi.server.UnicastRemoteObject;
 public class Player extends UnicastRemoteObject implements IPlayer {
 
 	private static final long serialVersionUID = 3446923264217560693L;
-	int posX, posY, w = 7, h = 10;
-    double speed = 0.4;
-    boolean standUp = false;
-    boolean waiting = true;
+	int posX, posY, w = 7, h = 10, lives;
+	double speed = 0.4;
+	boolean standUp = false;
+	boolean waiting = true;
 
-    public Player(int x, int y) throws RemoteException {
-        this.posX = x;
-        this.posY = y;
-    }
+	public Player(int x, int y) throws RemoteException {
+		this.posX = x;
+		this.posY = y;
+		this.lives = 0;
+	}
 
-    @Override
+	@Override
 	public void jump(){
-        if(this.standUp)
-            this.speed = -0.9;
-        this.standUp = false;
-    }
+		if(this.standUp)
+			this.speed = -0.9;
+		this.standUp = false;
+	}
 
-    @Override
+	@Override
 	public void moveRight() {
-        this.posX += 2;
-    }
+		this.posX += 2;
+	}
 
-    @Override
+	@Override
 	public void moveLeft() {
-        this.posX -= 2;
-    }
+		this.posX -= 2;
+	}
 
-    @Override
+	@Override
 	public void update(int dx){
-        this.posY += this.speed*dx;
-        this.speed += this.speed < 0.8 ? 0.02: 0;
-        this.standUp = (this.speed == 0);
-    }
+		this.posY += this.speed*dx;
+		this.speed += this.speed < 0.8 ? 0.02: 0;
+		this.standUp = (this.speed == 0);
+	}
 
-    @Override
+	@Override
 	public void draw(Graphics g){
-        g.fillRect(this.posX, this.posY, this.w, this.h);
-    }
+		g.fillRect(this.posX, this.posY, this.w, this.h);
+	}
 
-//	@Override
-//    public String toString(){
-//        return "player: position ("+this.posX+","+this.posY+")";
-//    }
+	//	@Override
+	//    public String toString(){
+		//        return "player: position ("+this.posX+","+this.posY+")";
+		//    }
 
 	@Override
 	public boolean collideBench(IBench b) throws RemoteException{
-        return Math.abs(bottom() - b.top()) < 5 && right() <= b.right() && left() >= b.left();
-    }
+		return Math.abs(bottom() - b.top()) < 5 && right() <= b.right() && left() >= b.left();
+	}
 
 	@Override 
 	public boolean hitBench(IBench b) throws RemoteException{
-        return Math.abs(top() - b.bottom()) < 5 && right() <= b.right() && left() >= b.left();
-    }
+		return Math.abs(top() - b.bottom()) < 5 && right() <= b.right() && left() >= b.left();
+	}
 
-    @Override
+	@Override
 	public int top() {
-        return this.posY;
-    }
+		return this.posY;
+	}
 
-    @Override
+	@Override
 	public int left() {
-        return this.posX;
-    }
+		return this.posX;
+	}
 
-    @Override
+	@Override
 	public int bottom() {
-        return this.posY + this.h;
-    }
+		return this.posY + this.h;
+	}
 
-    @Override
+	@Override
 	public int right() {
-        return this.posX + this.w;
-    }
+		return this.posX + this.w;
+	}
 
 	@Override
 	public int getPosX() {
@@ -164,5 +165,20 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public boolean pushPlayerLeft(IPlayer p) throws RemoteException {
 		return bottom() > p.top() && top() < p.bottom() && Math.abs(left() - p.right()) < 2;
+	}
+
+	@Override
+	public int getLives(){
+		return this.lives;
+	}
+
+	@Override
+	public void setLives(int lives) throws RemoteException {
+		this.lives = lives;
+	}
+
+	@Override
+	public boolean hasLives() throws RemoteException {
+		return this.getLives()>=0;
 	}
 }
