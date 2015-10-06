@@ -2,6 +2,10 @@ if [ -z "$1" ]
   then echo "Please provide the number of players."
   exit
 fi
+if [ -z "$2" ]
+  then echo "Please provide the number of lives."
+  exit
+fi
 # Get the local IP
 SERVER_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
 # Compile files
@@ -18,4 +22,4 @@ cd DistributedClimbers-Server/bin
 rmiregistry &
 # Run server
 echo "Starting server..."
-java -Djava.rmi.server.hostname=$SERVER_IP cl.uchile.dcc.cc5303.Server $SERVER_IP $1
+java -Djava.rmi.server.hostname=$SERVER_IP cl.uchile.dcc.cc5303.Server $SERVER_IP $1 $2

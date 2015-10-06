@@ -9,6 +9,7 @@ public class Server{
 	
 	public static String URLSERVER;
 	public static int NB_OF_PLAYERS;
+	public static int NB_OF_LIVES;
 	private static int[][] benches  = {
 			//TODO ver como generar estas cosas de manera más aleatoria y bonita
             {0, 410, 0},
@@ -31,11 +32,12 @@ public class Server{
 	public static void main(String[] args) {
 		URLSERVER = "rmi://" + args[0] + ":1099/iceClimbers";
 		NB_OF_PLAYERS = Integer.parseInt(args[1]);
+		NB_OF_LIVES = Integer.parseInt(args[2]);
 		int width = 800, height = 600;
 		try {
 			ArrayList<IPlayer> players = new ArrayList<IPlayer>();
 			for(int i = 0; i < NB_OF_PLAYERS; i++) {
-				players.add(new Player(100+width/4*(i),height-50));
+				players.add(new Player(100+width/4*(i), height-50, NB_OF_LIVES));
 			}
 			int i = 0;
 			for(IPlayer player : players) {
