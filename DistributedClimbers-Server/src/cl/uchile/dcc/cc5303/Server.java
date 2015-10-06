@@ -48,8 +48,8 @@ public class Server{
 				IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
 				manager.add(bench);
 			}
-			Naming.rebind(URLSERVER + "/benchmanager", manager);
-			System.out.println("Benche manager  published in server: " + URLSERVER + "/benchmanager");
+			Naming.rebind(URLSERVER + "/benchManager", manager);
+			System.out.println("Bench manager published in server: " + URLSERVER + "/benchManager");
             IGestor gestor = new Gestor(NB_OF_PLAYERS, benches.length);
             Naming.rebind(URLSERVER + "/gestor", gestor);
             System.out.println("Gestor published in server: " + URLSERVER + "/gestor");

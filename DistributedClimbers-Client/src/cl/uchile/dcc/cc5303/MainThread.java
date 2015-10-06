@@ -30,14 +30,15 @@ public class MainThread extends Thread {
 	//private ArrayList<IBench> allBenches;
 	private IBenchManager benchManager;
 	private IGestor gestor;
+	@SuppressWarnings("unused")
 	private boolean isGameOver = false; 
 
 	int frames = new Random().nextInt(2 * framesToNewBench);
 
-	public MainThread() throws RemoteException {
+	public MainThread(String urlServer) throws RemoteException {
+		urlServer = "rmi://" + urlServer + ":1099/iceClimbers";
 		keys = new boolean[KeyEvent.KEY_LAST];
 
-		String urlServer = "rmi://172.17.69.201:1099/iceClimbers";
 		//Jugadores
 		allPlayers = new ArrayList<IPlayer>();
 		//allBenches = new ArrayList<IBench>();
@@ -48,7 +49,7 @@ public class MainThread extends Thread {
 			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "/player" + i));
 			}
-			benchManager = (IBenchManager) Naming.lookup(urlServer + "/benchmanager"); 
+			benchManager = (IBenchManager) Naming.lookup(urlServer + "/benchManager"); 
 		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
 			e1.printStackTrace();
 		}
@@ -98,91 +99,81 @@ public class MainThread extends Thread {
 		}
 		while (true) { // Main loop
 			//Check controls
-			if (!isGameOver) {
+			try {
+				if (keys[KeyEvent.VK_UP]) {
+					myPlayer.jump();
+				}
+				if (keys[KeyEvent.VK_RIGHT]) {
+					myPlayer.moveRight();
+				}
+				if (keys[KeyEvent.VK_LEFT]) {
+					myPlayer.moveLeft();
+				}
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			//update players
+			try {
+				myPlayer.update(DX);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+
+			//update barras
+			boolean levelsDown = false;
+			try {
+				for (IBench barra : tablero.bases.getBenches()) {
+					if (myPlayer.hitBench(barra))
+						myPlayer.setSpeed(0.8);
+					else if (myPlayer.collideBench(barra)) {
+						myPlayer.setSpeed(0.01);
+						myPlayer.setStandUp(true);
+						if (barra.getLevel() > 2){
+							levelsDown = true;
+						}
+					}
+				}
+				if(myPlayer.getPosY() > HEIGHT){
+					myPlayer.setLives(myPlayer.getLives()-1);
+					if(myPlayer.hasLives()){
+						myPlayer.setPosY(0);
+						myPlayer.setPosX(WIDTH/2);
+					}
+				}
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			for (IPlayer player: tablero.players){
 				try {
-					if(gestor.gameOver(allPlayers)){
-						isGameOver = true;
-						tablero.isGameOver = true;
-						System.out.println("asdvdghasgh");
-					} else {
-						try {
-							if (keys[KeyEvent.VK_UP]) {
-								myPlayer.jump();
-							}
-							if (keys[KeyEvent.VK_RIGHT]) {
-								myPlayer.moveRight();
-							}
-							if (keys[KeyEvent.VK_LEFT]) {
-								myPlayer.moveLeft();
-							}
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-						//update players
-						try {
-							myPlayer.update(DX);
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-
-						//update barras
-						boolean levelsDown = false;
-						try {
-							for (IBench barra : tablero.bases.getBenches()) {
-								if (myPlayer.hitBench(barra))
-									myPlayer.setSpeed(0.8);
-								else if (myPlayer.collideBench(barra)) {
-									myPlayer.setSpeed(0.01);
-									myPlayer.setStandUp(true);
-									if (barra.getLevel() > 2){
-										levelsDown = true;
-									}
-								}
-							}
-							if(myPlayer.getPosY() > HEIGHT){
-								myPlayer.setLives(myPlayer.getLives()-1);
-								if(myPlayer.hasLives()){
-									myPlayer.setPosY(0);
-									myPlayer.setPosX(WIDTH/2);
-								}
-							}
-						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-						for (IPlayer player: tablero.players){
-							try {
-								if(myPlayer.pushPlayerRight(player)){
-									player.moveRight();
-								}
-								else if(myPlayer.pushPlayerLeft(player)){
-									player.moveLeft();
-								}
-							} catch (RemoteException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-
-						// Update board
-						if (levelsDown) {
-							try {
-								tablero.levelsDown();
-							} catch (RemoteException e) {
-								e.printStackTrace();
-							}
-						}
-
-						try {
-							Thread.sleep(1000 / UPDATE_RATE);
-						} catch (InterruptedException ex) {
-						}
+					if(myPlayer.pushPlayerRight(player)){
+						player.moveRight();
+					}
+					else if(myPlayer.pushPlayerLeft(player)){
+						player.moveLeft();
 					}
 				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+
+			// Update board
+			if (levelsDown) {
+				try {
+					tablero.levelsDown();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			tablero.repaint();
+
+			try {
+				Thread.sleep(1000 / UPDATE_RATE);
+			} catch (InterruptedException ex) {
+				
 			}
 		}
 	}

@@ -64,7 +64,7 @@ public class Board extends Canvas {
 
 		g.drawImage(img, 0, 0, null);
 
-		if (isGameOver) drawGameOver(buffer);
+		//if (isGameOver) drawGameOver(buffer);
 	}
 
 	//    @Override

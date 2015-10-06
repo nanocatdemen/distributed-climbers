@@ -1,3 +1,11 @@
+if [ -z "$1" ]
+  then echo "Please provide an IP to serve."
+  exit
+fi
+if [ -z "$2" ]
+  then echo "Please provide an the number of lives."
+  exit
+fi
 # Compile files
 echo "Compiling..."
 javac DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java

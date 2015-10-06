@@ -1,3 +1,7 @@
+if [ -z "$1" ]
+  then echo "Please provide an IP to connect."
+  exit
+fi
 # Compile files
 echo "Compiling..."
 javac DistributedClimbers-Client/src/cl/uchile/dcc/cc5303/*.java DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
@@ -9,4 +13,4 @@ mv DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.class DistributedClimbe
 # Run client
 echo "Starting client..."
 cd DistributedClimbers-Client/bin
-java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Main
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Main $1

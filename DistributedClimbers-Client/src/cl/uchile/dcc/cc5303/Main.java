@@ -9,7 +9,7 @@ public class Main {
     static final public int ALTO = 600;
 
     public static void main(String[] args) throws RemoteException {
-        MainThread m = new MainThread();
+        MainThread m = new MainThread(args[0]);
         m.start();
     }
 }
