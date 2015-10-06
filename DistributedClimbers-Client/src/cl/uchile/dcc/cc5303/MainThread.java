@@ -86,14 +86,28 @@ public class MainThread extends Thread {
 	@Override
 	public void run() {
 		try {
-			if(gestor.areAllTaken()) {
-				gestor.doNotifyAll();
-				myPlayer.setWaiting(false);
-			} else {
-				// TODO: if possible, notify the connected players to update the state
-				myPlayer.setWaiting(false);
-				gestor.doWait();
+//			if(gestor.areAllTaken()) {
+//				gestor.doNotifyAll();
+//				myPlayer.setWaiting(false);
+//			} else {
+//				// TODO: if possible, notify the connected players to update the state
+//				myPlayer.setWaiting(false);
+//				gestor.doWait();
+//			}
+			while(true){
+				tablero.repaint();
+				if(gestor.areAllTaken()) {
+					gestor.doNotifyAll();
+					myPlayer.setWaiting(false);
+					break;
+				} else {
+					// TODO: if possible, notify the connected players to update the state
+					myPlayer.setWaiting(false);
+					gestor.doNotifyAll();
+					gestor.doWait();
+				}
 			}
+			gestor.doNotifyAll();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}
