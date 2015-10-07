@@ -111,11 +111,13 @@ public class MainThread extends Thread {
 							continue;
 						} else {
 							gestor.doWait();
+							if (!gestor.allWantRevancha()) System.exit(0);
 							tablero.isGameOver = false;
 							continue;
 						}
 					}
 					if (keys[KeyEvent.VK_ESCAPE]) {
+						gestor.doNotifyAll();
 						System.exit(0);
 					}
 				}
