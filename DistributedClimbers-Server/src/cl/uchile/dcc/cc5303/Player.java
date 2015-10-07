@@ -28,11 +28,17 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void moveRight() {
 		this.posX += 2;
+		if(this.posX > 800){
+			this.posX = this.posX - 800;
+		}
 	}
 
 	@Override
 	public void moveLeft() {
 		this.posX -= 2;
+		if(this.posX < 0){
+			this.posX = this.posX + 800;
+		}
 	}
 
 	@Override
