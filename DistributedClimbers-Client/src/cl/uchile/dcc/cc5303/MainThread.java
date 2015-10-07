@@ -93,40 +93,36 @@ public class MainThread extends Thread {
 					myPlayer.setWaiting(false);
 					break;
 				} else {
-					// TODO: if possible, notify the connected players to update the state
 					myPlayer.setWaiting(false);
 					gestor.doNotifyAll();
 					gestor.doWait();
 				}
 			}
-		} catch (RemoteException e1) {
-			e1.printStackTrace();
-		}
-		while (true) { // Main loop
-			//Check controls
-			try {
-				if (keys[KeyEvent.VK_UP]) {
-					myPlayer.jump();
-				}
-				if (keys[KeyEvent.VK_RIGHT]) {
-					myPlayer.moveRight();
-				}
-				if (keys[KeyEvent.VK_LEFT]) {
-					myPlayer.moveLeft();
-				}
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
-			//update players
-			try {
-				myPlayer.update(DX);
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
+			while (true) { // Main loop
+				//Check game state
+				if(gestor.gameOver(allPlayers)) isGameOver = true;
 
-			//update barras
-			boolean levelsDown = false;
-			try {
+				//Check controls
+				if(isGameOver) {
+					tablero.isGameOver = true;
+					gestor.doWait(); // espera a que terminen todos
+				}
+				else {
+					if (keys[KeyEvent.VK_UP]) {
+						myPlayer.jump();
+					}
+					if (keys[KeyEvent.VK_RIGHT]) {
+						myPlayer.moveRight();
+					}
+					if (keys[KeyEvent.VK_LEFT]) {
+						myPlayer.moveLeft();
+					}
+				}
+				//update players
+				myPlayer.update(DX);
+
+				//update barras
+				boolean levelsDown = false;
 				for (IBench barra : tablero.bases.getBenches()) {
 					if (myPlayer.hitBench(barra))
 						myPlayer.setSpeed(0.8);
@@ -145,41 +141,31 @@ public class MainThread extends Thread {
 						myPlayer.setPosX(WIDTH/2);
 					}
 				}
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 
-			for (IPlayer player: tablero.players){
-				try {
+				for (IPlayer player: tablero.players){
 					if(myPlayer.pushPlayerRight(player)){
 						player.moveRight();
 					}
 					else if(myPlayer.pushPlayerLeft(player)){
 						player.moveLeft();
 					}
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
-			}
 
-			// Update board
-			if (levelsDown) {
-				try {
+				// Update board
+				if (levelsDown) {
 					tablero.levelsDown();
-				} catch (RemoteException e) {
-					e.printStackTrace();
+				}
+
+				tablero.repaint();
+				try {
+					Thread.sleep(1000 / UPDATE_RATE);
+				} catch (InterruptedException ex) {
+
 				}
 			}
-			
-			tablero.repaint();
-
-			try {
-				Thread.sleep(1000 / UPDATE_RATE);
-			} catch (InterruptedException ex) {
-				
-			}
+		}
+		catch (RemoteException e){
+			e.printStackTrace();
 		}
 	}
 }

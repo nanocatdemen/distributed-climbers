@@ -32,7 +32,7 @@ public class Board extends Canvas {
 	@Override
 	public void paint(Graphics g) {
 		if(buffer==null){
-			img = createImage(getWidth(),getHeight() );
+			img = createImage(getWidth(),getHeight());
 			buffer = img.getGraphics();
 		}
 		
@@ -62,9 +62,12 @@ public class Board extends Canvas {
 			e.printStackTrace();
 		}
 
-		g.drawImage(img, 0, 0, null);
+		if (isGameOver) { 
+			Board.drawGameOver(buffer, this.width/2-150,this.height/2);
+		}
 
-		//if (isGameOver) drawGameOver(buffer);
+		g.drawImage(img, 0, 0, null);
+		
 	}
 
 	//    @Override
@@ -100,9 +103,9 @@ public class Board extends Canvas {
 		}
 	}
 
-	static void drawGameOver(Graphics buffer) {
+	static void drawGameOver(Graphics buffer, int x, int y) {
 		buffer.setFont(new Font("ComicSans", Font.PLAIN, 50));
 		buffer.setColor(Color.white);
-		buffer.drawString("GAME OVER", WIDTH, HEIGHT/2-100);
+		buffer.drawString("GAME OVER", x, y);
 	}
 }
