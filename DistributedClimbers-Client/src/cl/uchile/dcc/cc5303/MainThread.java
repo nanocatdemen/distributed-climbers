@@ -100,10 +100,7 @@ public class MainThread extends Thread {
 			}
 			while (true) { // Main loop
 				//Check game state
-				if(gestor.gameOver(allPlayers)) isGameOver = true;
-
-				//Check controls
-				if(isGameOver) {
+				if(gestor.gameOver(allPlayers)) {
 					tablero.isGameOver = true;
 //					gestor.doWait(); // espera a que terminen todos
 				}
