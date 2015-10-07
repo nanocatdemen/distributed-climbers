@@ -107,5 +107,10 @@ public class Board extends Canvas {
 		buffer.setFont(new Font("ComicSans", Font.PLAIN, 50));
 		buffer.setColor(Color.white);
 		buffer.drawString("GAME OVER", x, y);
+		buffer.setFont(new Font("ComicSans", Font.PLAIN, 20));
+		buffer.setColor(Color.lightGray);
+		buffer.drawString("Try Again?" , x, y+30);
+		buffer.drawString("Enter = Yes", x, y+60);
+		buffer.drawString("Esc = Salir" , x, y+90);
 	}
 }

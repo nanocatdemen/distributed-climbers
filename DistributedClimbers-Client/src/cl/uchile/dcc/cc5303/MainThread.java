@@ -150,8 +150,9 @@ public class MainThread extends Thread {
 				if(myPlayer.getPosY() > HEIGHT){
 					myPlayer.setLives(myPlayer.getLives()-1);
 					if(myPlayer.hasLives()){
-						myPlayer.setPosY(0);
+						myPlayer.setPosY(300);
 						myPlayer.setPosX(WIDTH/2);
+						myPlayer.setSpeed(-0.5);
 					}
 				}
 
