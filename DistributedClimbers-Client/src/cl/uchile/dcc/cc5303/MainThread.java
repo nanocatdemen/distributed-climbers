@@ -105,7 +105,7 @@ public class MainThread extends Thread {
 				//Check controls
 				if(isGameOver) {
 					tablero.isGameOver = true;
-					gestor.doWait(); // espera a que terminen todos
+//					gestor.doWait(); // espera a que terminen todos
 				}
 				else {
 					if (keys[KeyEvent.VK_UP]) {
