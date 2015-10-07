@@ -36,7 +36,7 @@ public class Board extends Canvas {
 			buffer = img.getGraphics();
 		}
 		
-		Color[] colors = {Color.red, Color.blue, Color.green, Color.yellow};
+		Color[] colors = {new Color(80,100,255), Color.pink, new Color(80,230,80), new Color(200,200,80)};
 		String[] names = {"popo", "nana", "meme", "lili"};
 
 		buffer.setColor(Color.black);
@@ -52,7 +52,7 @@ public class Board extends Canvas {
 			i++;
 		}
 
-		buffer.setColor(Color.white);
+		buffer.setColor(new Color(146,42,42));
 		try {
 			for(IBench base : bases.getBenches()){
 					buffer.fillRect(base.left(), base.top(), base.right()-base.left(), base.bottom()-base.top());
