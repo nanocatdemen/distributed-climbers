@@ -30,8 +30,7 @@ public class MainThread extends Thread {
 	//private ArrayList<IBench> allBenches;
 	private IBenchManager benchManager;
 	private IGestor gestor;
-	@SuppressWarnings("unused")
-	private boolean isGameOver = false; 
+	private int myID;
 
 	int frames = new Random().nextInt(2 * framesToNewBench);
 
@@ -44,8 +43,8 @@ public class MainThread extends Thread {
 		//allBenches = new ArrayList<IBench>();
 		try {
 			gestor = (IGestor) Naming.lookup(urlServer + "/gestor");
-			int myPlayerNumber = gestor.giffPlayer();
-			myPlayer = (IPlayer) Naming.lookup(urlServer + "/player" + myPlayerNumber);
+			myID = gestor.giffPlayer();
+			myPlayer = (IPlayer) Naming.lookup(urlServer + "/player" + myID);
 			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "/player" + i));
 			}
@@ -102,8 +101,25 @@ public class MainThread extends Thread {
 				//Check game state
 				if(gestor.gameOver(allPlayers)) {
 					tablero.isGameOver = true;
-//					gestor.doWait(); // espera a que terminen todos
+					// Revancha?
+					if (keys[KeyEvent.VK_ENTER]) {
+						gestor.IWantRevancha(myID);
+						if(gestor.allWantRevancha()) {
+							tablero.isGameOver = false;
+							gestor.resetGame(allPlayers);
+							gestor.doNotifyAll();
+							continue;
+						} else {
+							gestor.doWait();
+							tablero.isGameOver = false;
+							continue;
+						}
+					}
+					if (keys[KeyEvent.VK_ESCAPE]) {
+						System.exit(0);
+					}
 				}
+				// Check controls
 				else {
 					if (keys[KeyEvent.VK_UP]) {
 						myPlayer.jump();

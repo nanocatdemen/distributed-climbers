@@ -19,5 +19,11 @@ public interface IGestor extends Remote {
 	int getNbOfBenches() throws RemoteException;
 
 	boolean gameOver(ArrayList<IPlayer> allPlayers) throws RemoteException;
+
+	void IWantRevancha(int myID) throws RemoteException;
+
+	boolean allWantRevancha() throws RemoteException;
+
+	void resetGame(ArrayList<IPlayer> allPlayers) throws RemoteException;
 	
 }

@@ -11,11 +11,15 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	double speed = 0.4;
 	boolean standUp = false;
 	boolean waiting = true;
+	int startPosX, startPosY, startLives;
 
 	public Player(int x, int y, int lives) throws RemoteException {
 		this.posX = x;
 		this.posY = y;
+		this.startPosX = x;
+		this.startPosY = y;
 		this.lives = lives;
+		this.startLives = lives;
 	}
 
 	@Override
@@ -186,5 +190,12 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public boolean hasLives() throws RemoteException {
 		return this.getLives()>=0;
+	}
+
+	@Override
+	public void reset() throws RemoteException {
+		this.posX = this.startPosX;
+		this.posY = this.startPosY;
+		this.lives = this.startLives;
 	}
 }

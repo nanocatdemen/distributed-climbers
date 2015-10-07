@@ -8,14 +8,17 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 
 	private static final long serialVersionUID = 1L;
 	ArrayList<Boolean> taken;
+	ArrayList<Boolean> revanchaWanters;
 	protected Mutex lock;
 	int nbOfPlayers;
 	int nbOfBenches;
 	
 	public Gestor(int players, int benches) throws RemoteException {
 		taken = new ArrayList<Boolean>();
+		revanchaWanters = new ArrayList<Boolean>();
 		for(int i = 0; i < players; i++) {
 			taken.add(false);
+			revanchaWanters.add(false);
 		}
 		lock = new Mutex();
 		nbOfPlayers = players;
@@ -72,8 +75,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	}
 
 	@Override
-	public boolean gameOver(ArrayList<IPlayer> allPlayers)
-			throws RemoteException {
+	public boolean gameOver(ArrayList<IPlayer> allPlayers) throws RemoteException {
 		int cnt = 0;
 		for(IPlayer player : allPlayers){
 			if(player.getLives()<0){
@@ -82,4 +84,30 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		}
 		return cnt==(allPlayers.size()-1);
 	}
+
+	@Override
+	public void IWantRevancha(int i) {
+		revanchaWanters.set(i, true);
+		
+	}
+
+	@Override
+	public boolean allWantRevancha() {
+		boolean ret = true;
+		for(boolean b : this.revanchaWanters) {
+			ret = ret && b;
+		}
+		return ret;
+	}
+
+	@Override
+	public void resetGame(ArrayList<IPlayer> allPlayers) throws RemoteException {
+		for(int i = 0; i < this.revanchaWanters.size(); i++) {
+			this.revanchaWanters.set(i,false);
+		}
+		for(IPlayer p : allPlayers) {
+			p.reset();
+		}
+	}
+
 }

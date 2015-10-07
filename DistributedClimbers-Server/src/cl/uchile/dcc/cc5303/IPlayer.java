@@ -70,4 +70,6 @@ public interface IPlayer extends Remote {
 
 	public boolean hasLives() throws RemoteException;
 
+	public void reset() throws RemoteException;
+
 }
