@@ -17,10 +17,10 @@ Building Ice Climbers
 ```
 Running Ice Climbers
 --------------------
-To run the server, execute `server.sh` with the number of players and the number
+To run the server, execute `server.sh` with the IP to serve, the number of players and the number
  of lives for each player.
 ```bash
-> ./server.sh 2 3
+> ./server.sh localhost 2 3
 ```
 To run a client, execute `client.sh` with the IP to connect.
 ```bash

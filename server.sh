@@ -1,13 +1,15 @@
 if [ -z "$1" ]
-  then echo "Please provide the number of players."
+  then echo "Please provide an IP to connect."
   exit
 fi
 if [ -z "$2" ]
+  then echo "Please provide the number of players."
+  exit
+fi
+if [ -z "$3" ]
   then echo "Please provide the number of lives."
   exit
 fi
-# Get the local IP
-SERVER_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
 # Compile files
 echo "Compiling..."
 javac DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
@@ -22,4 +24,4 @@ cd DistributedClimbers-Server/bin
 rmiregistry &
 # Run server
 echo "Starting server..."
-java -Djava.rmi.server.hostname=$SERVER_IP cl.uchile.dcc.cc5303.Server $SERVER_IP $1 $2
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Server $1 $2 $3
