@@ -99,26 +99,26 @@ public class MainThread extends Thread {
 			}
 			while (true) { // Main loop
 				//Check game state
+				tablero.isGameOver = false;
 				if(gestor.gameOver(allPlayers)) {
 					tablero.isGameOver = true;
 					// Revancha?
 					if (keys[KeyEvent.VK_ENTER]) {
 						gestor.IWantRevancha(myID);
 						if(gestor.allWantRevancha()) {
-							tablero.isGameOver = false;
-							gestor.resetGame(allPlayers, benchManager);
 							gestor.doNotifyAll();
+							gestor.resetGame(allPlayers, benchManager);
 							continue;
 						} else {
 							System.out.println("escapo!");
 							gestor.doWait();
 							if (!gestor.allWantRevancha()) System.exit(0);
-							tablero.isGameOver = false;
 							continue;
 						}
 					}
 					if (keys[KeyEvent.VK_ESCAPE]) {
 						gestor.weLost(myID);
+						gestor.doNotifyAll();
 						System.exit(0);
 					}
 					if(gestor.dedGaem()){
