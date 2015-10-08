@@ -119,7 +119,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	}
 
 	@Override
-	public void weLost(int i) throws RemoteException {
+	public void weLost(int i) throws RemoteException { //gg la climbers
 		this.dedGaem = true;
 	}
 
