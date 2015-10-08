@@ -29,5 +29,11 @@ public interface IGestor extends Remote {
 	boolean dedGaem() throws RemoteException;
 	
 	void weLost(int i) throws RemoteException;
+
+	void feed(int myID) throws RemoteException;
+
+	void resetScore() throws RemoteException;
+
+	int[] getResults() throws RemoteException;
 	
 }

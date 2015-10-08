@@ -19,11 +19,15 @@ public class Board extends Canvas {
 	public Image img;
 	public Graphics buffer;
 	public boolean isGameOver;
+	public int[] results;
+	int nbp;
 
-	public Board(int w, int h){
+	public Board(int w, int h, int nbOfPlayers){
 		this.width = w;
 		this.height = h;
+		results = new int[nbOfPlayers];
 		isGameOver = false;
+		nbp = nbOfPlayers;
 	}
 
 	@Override
@@ -51,6 +55,7 @@ public class Board extends Canvas {
 			}
 			i++;
 		}
+		
 
 		buffer.setColor(new Color(146,42,42));
 		try {
@@ -64,6 +69,7 @@ public class Board extends Canvas {
 
 		if (isGameOver) { 
 			Board.drawGameOver(buffer, this.width/2-150,this.height/2);
+			Board.drawResults(buffer, results, nbp, 550, 400);
 		}
 
 		g.drawImage(img, 0, 0, null);
@@ -112,5 +118,19 @@ public class Board extends Canvas {
 		buffer.drawString("Try Again?" , x, y+30);
 		buffer.drawString("Enter = Yes", x, y+60);
 		buffer.drawString("Esc = Salir" , x, y+90);
+	}
+	
+	static void drawResults(Graphics buffer, int[] results, int nbp, int x, int y){
+		buffer.setFont(new Font("ComicSans", Font.PLAIN, 30));
+		int disp = 96;
+		String player = "";
+		for(int i = 0; i<nbp; i++){
+			if(results[i]==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}
+			if(results[i]==1){ buffer.setColor(Color.pink); player = "nana";}
+			if(results[i]==2){ buffer.setColor(new Color(80,230,80)); player = "meme";}
+			if(results[i]==3){ buffer.setColor(new Color(200,200,80)); player = "lili";}
+			buffer.drawString((nbp-i)+"º: "+player, x, y+disp);
+			disp -= 32;
+		}
 	}
 }

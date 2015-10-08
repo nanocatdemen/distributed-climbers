@@ -72,4 +72,8 @@ public interface IPlayer extends Remote {
 
 	public void reset() throws RemoteException;
 
+	public void die() throws RemoteException;
+
+	public boolean isAlive() throws RemoteException;
+
 }

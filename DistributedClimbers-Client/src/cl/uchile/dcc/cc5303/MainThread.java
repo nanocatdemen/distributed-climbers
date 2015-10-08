@@ -57,7 +57,7 @@ public class MainThread extends Thread {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		tablero = new Board(WIDTH, HEIGHT);
+		tablero = new Board(WIDTH, HEIGHT, gestor.getNbOfPlayers());
 		tablero.players = allPlayers;
 		tablero.bases = benchManager;
 
@@ -101,6 +101,9 @@ public class MainThread extends Thread {
 				//Check game state
 				tablero.isGameOver = false;
 				if(gestor.gameOver(allPlayers)) {
+					for(int i = 0; i<gestor.getNbOfPlayers(); i++){
+						tablero.results[i] = gestor.getResults()[i];
+					}
 					tablero.isGameOver = true;
 					// Revancha?
 					if (keys[KeyEvent.VK_ENTER]) {
@@ -144,7 +147,7 @@ public class MainThread extends Thread {
 				boolean levelsDown = false;
 				for (IBench barra : tablero.bases.getBenches()) {
 					if (myPlayer.hitBench(barra))
-						myPlayer.setSpeed(0.8);
+						myPlayer.setSpeed(0.4);
 					else if (myPlayer.collideBench(barra)) {
 						myPlayer.setSpeed(0.01);
 						myPlayer.setStandUp(true);
@@ -153,12 +156,16 @@ public class MainThread extends Thread {
 						}
 					}
 				}
-				if(myPlayer.getPosY() > HEIGHT){
+				if(myPlayer.getPosY() > HEIGHT && myPlayer.isAlive()){
 					myPlayer.setLives(myPlayer.getLives()-1);
 					if(myPlayer.hasLives()){
 						myPlayer.setPosY(300);
 						myPlayer.setPosX(WIDTH/2);
 						myPlayer.setSpeed(-0.5);
+					}
+					else{
+						myPlayer.die();
+						gestor.feed(myID);
 					}
 				}
 

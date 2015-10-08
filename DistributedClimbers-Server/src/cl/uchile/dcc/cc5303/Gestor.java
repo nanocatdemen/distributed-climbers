@@ -13,6 +13,8 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	protected Mutex lock;
 	int nbOfPlayers;
 	int nbOfBenches;
+	int[] score;
+	int dead = 0;
 	
 	public Gestor(int players, int benches) throws RemoteException {
 		taken = new ArrayList<Boolean>();
@@ -24,6 +26,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		lock = new Mutex();
 		nbOfPlayers = players;
 		nbOfBenches = benches;
+		score = new int[players-1];
 	}
 
 	@Override
@@ -109,7 +112,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		for(IPlayer p : allPlayers) {
 			p.reset();
 		}
-		
+		resetScore();
 		benchManager.resetBenchs();
 	}
 
@@ -121,6 +124,38 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	@Override
 	public void weLost(int i) throws RemoteException { //gg la climbers
 		this.dedGaem = true;
+	}
+
+	@Override
+	public void feed(int deadPlayer) {
+		score[dead]= deadPlayer;
+		dead++;
+	}
+	
+	@Override
+	public void resetScore(){
+		dead = 0;
+	}
+	
+	@Override
+	public int[] getResults(){
+		int[] results = new int[nbOfPlayers];
+		int sum = 0;
+		int maxsum = 0;
+		int i;
+		for(i = 0; i<nbOfPlayers-1; i++){
+			results[i] = score[i];
+			sum += results[i];
+			maxsum += i;
+		}
+		maxsum += i;
+		//esta parte deduce a partir de que players murieron, el player que sigue vivo para anunciarlo como ganador
+		if(sum == maxsum-3) results[nbOfPlayers-1] = 3;
+		else if(sum == maxsum-2) results[nbOfPlayers-1] = 2;
+		else if(sum == maxsum-1) results[nbOfPlayers-1] = 1;
+		else if(sum == maxsum) results[nbOfPlayers-1] = 0;
+		
+		return results;
 	}
 
 }
