@@ -12,4 +12,6 @@ public interface IBenchManager extends Remote {
 
 	void setBenches(ArrayList<IBench> benches) throws RemoteException;
 
+	void resetBenchs() throws RemoteException;
+
 }

@@ -101,13 +101,15 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	}
 
 	@Override
-	public void resetGame(ArrayList<IPlayer> allPlayers) throws RemoteException {
+	public void resetGame(ArrayList<IPlayer> allPlayers, IBenchManager benchManager) throws RemoteException {
 		for(int i = 0; i < this.revanchaWanters.size(); i++) {
 			this.revanchaWanters.set(i,false);
 		}
 		for(IPlayer p : allPlayers) {
 			p.reset();
 		}
+		
+		benchManager.resetBenchs();
 	}
 
 }

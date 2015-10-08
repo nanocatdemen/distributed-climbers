@@ -24,5 +24,5 @@ To run the server, execute `server.sh` with the IP to serve, the number of playe
 ```
 To run a client, execute `client.sh` with the IP to connect.
 ```bash
-> ./server.sh localhost
+> ./client.sh localhost
 ```

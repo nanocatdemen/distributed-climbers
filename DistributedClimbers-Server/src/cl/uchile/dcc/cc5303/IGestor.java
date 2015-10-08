@@ -24,6 +24,6 @@ public interface IGestor extends Remote {
 
 	boolean allWantRevancha() throws RemoteException;
 
-	void resetGame(ArrayList<IPlayer> allPlayers) throws RemoteException;
+	void resetGame(ArrayList<IPlayer> allPlayers, IBenchManager benchManager) throws RemoteException;
 	
 }

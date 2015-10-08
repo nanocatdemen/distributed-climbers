@@ -106,10 +106,11 @@ public class MainThread extends Thread {
 						gestor.IWantRevancha(myID);
 						if(gestor.allWantRevancha()) {
 							tablero.isGameOver = false;
-							gestor.resetGame(allPlayers);
+							gestor.resetGame(allPlayers, benchManager);
 							gestor.doNotifyAll();
 							continue;
 						} else {
+							System.out.println("escapo!");
 							gestor.doWait();
 							if (!gestor.allWantRevancha()) System.exit(0);
 							tablero.isGameOver = false;
