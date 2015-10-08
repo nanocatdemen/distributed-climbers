@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class Player extends UnicastRemoteObject implements IPlayer {
 
 	private static final long serialVersionUID = 3446923264217560693L;
-	int posX, posY, w = 7, h = 10, lives;
+	int posX, posY, w = 12, h = 20, lives;
 	double speed = 0.4;
 	boolean standUp = false;
 	boolean waiting = true;
