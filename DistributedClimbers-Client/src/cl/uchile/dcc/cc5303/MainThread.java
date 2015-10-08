@@ -118,7 +118,10 @@ public class MainThread extends Thread {
 						}
 					}
 					if (keys[KeyEvent.VK_ESCAPE]) {
-						gestor.doNotifyAll();
+						gestor.weLost(myID);
+						System.exit(0);
+					}
+					if(gestor.dedGaem()){
 						System.exit(0);
 					}
 				}

@@ -9,6 +9,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	private static final long serialVersionUID = 1L;
 	ArrayList<Boolean> taken;
 	ArrayList<Boolean> revanchaWanters;
+	boolean dedGaem = false;
 	protected Mutex lock;
 	int nbOfPlayers;
 	int nbOfBenches;
@@ -110,6 +111,16 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		}
 		
 		benchManager.resetBenchs();
+	}
+
+	@Override
+	public boolean dedGaem() throws RemoteException {
+		return this.dedGaem;
+	}
+
+	@Override
+	public void weLost(int i) throws RemoteException {
+		this.dedGaem = true;
 	}
 
 }
