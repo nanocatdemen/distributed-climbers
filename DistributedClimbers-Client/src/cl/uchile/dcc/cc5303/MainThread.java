@@ -111,6 +111,7 @@ public class MainThread extends Thread {
 						if(gestor.allWantRevancha()) {
 							gestor.doNotifyAll();
 							gestor.resetGame(allPlayers, benchManager);
+							tablero.bases = benchManager.getBenches();
 							continue;
 						} else {
 							System.out.println("escapo!");
