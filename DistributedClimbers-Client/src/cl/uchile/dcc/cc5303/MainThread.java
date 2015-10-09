@@ -113,15 +113,17 @@ public class MainThread extends Thread {
 							gestor.doNotifyAll();
 							synchronized (gestor.getMutex()) {
 								gestor.resetGame(allPlayers, benchManager);
+								for(int i = 0; i < benchManager.nbOfBenches(); i++)
+									tablero.bases.set(i, benchManager.getBenches(i));
 							}
-							for(int i = 0; i < benchManager.nbOfBenches(); i++)
-								tablero.bases.set(i, benchManager.getBenches(i));
 							continue;
 						} else {
 							gestor.doWait();
 							if (!gestor.allWantRevancha()) System.exit(0);
-							for(int i = 0; i < benchManager.nbOfBenches(); i++)
-								tablero.bases.set(i, benchManager.getBenches(i));
+							synchronized (gestor.getMutex()) {
+								for(int i = 0; i < benchManager.nbOfBenches(); i++)
+									tablero.bases.set(i, benchManager.getBenches(i));
+							}
 							continue;
 						}
 					}
