@@ -110,12 +110,12 @@ public class MainThread extends Thread {
 					if (keys[KeyEvent.VK_ENTER]) {
 						gestor.IWantRevancha(myID);
 						if(gestor.allWantRevancha()) {
-							gestor.doNotifyAll();
 							synchronized (gestor.getMutex()) {
 								gestor.resetGame(allPlayers, benchManager);
 								for(int i = 0; i < benchManager.nbOfBenches(); i++)
 									tablero.bases.set(i, benchManager.getBenches(i));
 							}
+							gestor.doNotifyAll();
 							continue;
 						} else {
 							gestor.doWait();
