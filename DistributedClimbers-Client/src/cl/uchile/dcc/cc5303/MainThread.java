@@ -114,9 +114,9 @@ public class MainThread extends Thread {
 							tablero.bases = benchManager.getBenches();
 							continue;
 						} else {
-							System.out.println("escapo!");
 							gestor.doWait();
 							if (!gestor.allWantRevancha()) System.exit(0);
+							tablero.bases = benchManager.getBenches();
 							continue;
 						}
 					}
