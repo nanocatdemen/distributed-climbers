@@ -119,7 +119,10 @@ public class MainThread extends Thread {
 							continue;
 						} else {
 							gestor.doWait();
-							if (!gestor.allWantRevancha()) System.exit(0);
+							if (!gestor.allWantRevancha()) {
+								System.out.println("holi");
+								System.exit(0);
+							}
 							synchronized (gestor.getMutex()) {
 								for(int i = 0; i < benchManager.nbOfBenches(); i++)
 									tablero.bases.set(i, benchManager.getBenches(i));
