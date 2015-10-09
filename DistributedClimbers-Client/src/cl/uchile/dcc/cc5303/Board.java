@@ -15,7 +15,7 @@ public class Board extends Canvas {
 	public int width, height;
 
 	public ArrayList<IPlayer> players;
-	public IBenchManager bases;
+	public ArrayList<IBench> bases;
 	public Image img;
 	public Graphics buffer;
 	public boolean isGameOver;
@@ -59,7 +59,7 @@ public class Board extends Canvas {
 
 		buffer.setColor(new Color(146,42,42));
 		try {
-			for(IBench base : bases.getBenches()){
+			for(IBench base : bases){
 					buffer.fillRect(base.left(), base.top(), base.right()-base.left(), base.bottom()-base.top());
 			}
 		} catch (RemoteException e) {
@@ -84,11 +84,11 @@ public class Board extends Canvas {
 	//    }
 
 	public void setBenches(ArrayList<IBench> benches) throws RemoteException {
-		this.bases.setBenches(benches);
+		this.bases = benches;
 	}
 
 	public void levelsDown() throws RemoteException {
-		for(IBench base: bases.getBenches()) {
+		for(IBench base: bases) {
 			base.levelDown();
 		}
 		for(IPlayer player: players){

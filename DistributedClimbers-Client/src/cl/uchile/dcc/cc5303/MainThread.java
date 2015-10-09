@@ -59,7 +59,7 @@ public class MainThread extends Thread {
 
 		tablero = new Board(WIDTH, HEIGHT, gestor.getNbOfPlayers());
 		tablero.players = allPlayers;
-		tablero.bases = benchManager;
+		tablero.bases = benchManager.getBenches();
 
 		frame.add(tablero);
 		tablero.setSize(WIDTH, HEIGHT);
@@ -145,7 +145,7 @@ public class MainThread extends Thread {
 
 				//update barras
 				boolean levelsDown = false;
-				for (IBench barra : tablero.bases.getBenches()) {
+				for (IBench barra : tablero.bases) {
 					if (myPlayer.hitBench(barra))
 						myPlayer.setSpeed(0.4);
 					else if (myPlayer.collideBench(barra)) {
