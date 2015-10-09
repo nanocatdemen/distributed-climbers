@@ -59,7 +59,8 @@ public class MainThread extends Thread {
 
 		tablero = new Board(WIDTH, HEIGHT, gestor.getNbOfPlayers());
 		tablero.players = allPlayers;
-		tablero.bases = benchManager.getBenches();
+		for(int i = 0; i < benchManager.nbOfBenches(); i++)
+			tablero.bases.add(benchManager.getBenches(i));
 
 		frame.add(tablero);
 		tablero.setSize(WIDTH, HEIGHT);
@@ -111,12 +112,14 @@ public class MainThread extends Thread {
 						if(gestor.allWantRevancha()) {
 							gestor.doNotifyAll();
 							gestor.resetGame(allPlayers, benchManager);
-							tablero.bases = benchManager.getBenches();
+							for(int i = 0; i < benchManager.nbOfBenches(); i++)
+								tablero.bases.set(i, benchManager.getBenches(i));
 							continue;
 						} else {
 							gestor.doWait();
 							if (!gestor.allWantRevancha()) System.exit(0);
-							tablero.bases = benchManager.getBenches();
+							for(int i = 0; i < benchManager.nbOfBenches(); i++)
+								tablero.bases.set(i, benchManager.getBenches(i));
 							continue;
 						}
 					}

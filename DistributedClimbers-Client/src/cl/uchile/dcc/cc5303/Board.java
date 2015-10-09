@@ -28,6 +28,7 @@ public class Board extends Canvas {
 		results = new int[nbOfPlayers];
 		isGameOver = false;
 		nbp = nbOfPlayers;
+		bases = new ArrayList<IBench>();
 	}
 
 	@Override

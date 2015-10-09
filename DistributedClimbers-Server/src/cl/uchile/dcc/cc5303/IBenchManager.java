@@ -8,10 +8,12 @@ public interface IBenchManager extends Remote {
 
 	void add(IBench bench) throws RemoteException;
 
-	ArrayList<IBench> getBenches() throws RemoteException;
-
 	void setBenches(ArrayList<IBench> benches) throws RemoteException;
 
 	void resetBenchs() throws RemoteException;
+	
+	IBench getBenches(int bench) throws RemoteException;
+
+	int nbOfBenches() throws RemoteException;
 
 }

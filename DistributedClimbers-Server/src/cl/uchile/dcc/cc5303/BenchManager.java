@@ -3,8 +3,9 @@ package cl.uchile.dcc.cc5303;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class BenchManager extends UnicastRemoteObject implements IBenchManager {
+public class BenchManager extends UnicastRemoteObject implements IBenchManager{
 	
 	private static final long serialVersionUID = 8149048047551563401L;
 	private ArrayList<IBench> benches;
@@ -17,8 +18,8 @@ public class BenchManager extends UnicastRemoteObject implements IBenchManager {
 		benches.add(bench);		
 	}
 	@Override
-	public ArrayList<IBench> getBenches(){
-		return benches;
+	public IBench getBenches(int bench){
+		return benches.get(bench);
 	}
 	@Override
 	public void setBenches(ArrayList<IBench> benches){
@@ -48,7 +49,10 @@ public class BenchManager extends UnicastRemoteObject implements IBenchManager {
 		for(int i = 0; i < benches.length; i++){
 			IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
 			this.add(bench);
-		}
-		
+		}	
+	}
+	@Override
+	public int nbOfBenches() throws RemoteException {
+		return benches.size();
 	}
 }
