@@ -119,8 +119,8 @@ public class MainThread extends Thread {
 							continue;
 						} else {
 							gestor.doWait();
-							if (!gestor.allWantRevancha()) {
-								System.out.println("holi");
+							if (gestor.dedGaem()) {
+								System.out.println("ded gram");
 								System.exit(0);
 							}
 							synchronized (gestor.getMutex()) {
