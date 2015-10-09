@@ -158,4 +158,9 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 		return results;
 	}
 
+	@Override
+	public Mutex getMutex() throws RemoteException {
+		return lock;
+	}
+
 }

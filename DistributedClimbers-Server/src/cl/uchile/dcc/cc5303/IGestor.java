@@ -36,4 +36,6 @@ public interface IGestor extends Remote {
 
 	int[] getResults() throws RemoteException;
 	
+	Mutex getMutex() throws RemoteException;
+	
 }

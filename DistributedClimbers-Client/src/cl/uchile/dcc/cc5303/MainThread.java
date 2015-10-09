@@ -111,7 +111,9 @@ public class MainThread extends Thread {
 						gestor.IWantRevancha(myID);
 						if(gestor.allWantRevancha()) {
 							gestor.doNotifyAll();
-							gestor.resetGame(allPlayers, benchManager);
+							synchronized (gestor.getMutex()) {
+								gestor.resetGame(allPlayers, benchManager);
+							}
 							for(int i = 0; i < benchManager.nbOfBenches(); i++)
 								tablero.bases.set(i, benchManager.getBenches(i));
 							continue;
