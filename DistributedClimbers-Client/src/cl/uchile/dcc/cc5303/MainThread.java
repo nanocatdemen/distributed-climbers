@@ -1,5 +1,6 @@
 package cl.uchile.dcc.cc5303;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.MalformedURLException;
@@ -9,7 +10,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
 public class MainThread extends Thread {
 	public boolean[] keys;
@@ -22,8 +26,8 @@ public class MainThread extends Thread {
 	private final static int framesToNewBench = 100;
 	@SuppressWarnings("unused")
 	private final double vy = 0.3;
-
-	private JFrame frame;
+	
+	private Controller frame;
 	private Board tablero;
 	private IPlayer myPlayer;
 	private ArrayList<IPlayer> allPlayers;
@@ -53,7 +57,8 @@ public class MainThread extends Thread {
 			e1.printStackTrace();
 		}
 
-		frame = new JFrame(TITLE);
+		frame = new Controller(TITLE);
+		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -66,20 +71,24 @@ public class MainThread extends Thread {
 		tablero.setSize(WIDTH, HEIGHT);
 
 		frame.pack();
-		frame.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				keys[e.getKeyCode()] = true;
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-				keys[e.getKeyCode()] = false;
-			}
-		});
+		
+		frame.subscribePlayer(myPlayer);
+		
+		
+//		frame.addKeyListener(new KeyListener() {
+//			@Override
+//			public void keyTyped(KeyEvent e) {}
+//
+//			@Override
+//			public void keyPressed(KeyEvent e) {
+//				keys[e.getKeyCode()] = true;
+//			}
+//
+//			@Override
+//			public void keyReleased(KeyEvent e) {
+//				keys[e.getKeyCode()] = false;
+//			}
+//		});
 
 	}
 
@@ -141,15 +150,15 @@ public class MainThread extends Thread {
 				}
 				// Check controls
 				else {
-					if (keys[KeyEvent.VK_UP]) {
-						myPlayer.jump();
-					}
-					if (keys[KeyEvent.VK_RIGHT]) {
-						myPlayer.moveRight();
-					}
-					if (keys[KeyEvent.VK_LEFT]) {
-						myPlayer.moveLeft();
-					}
+//					if (keys[KeyEvent.VK_UP]) {
+//						myPlayer.jump();
+//					}
+//					if (keys[KeyEvent.VK_RIGHT]) {
+//						myPlayer.moveRight();
+//					}
+//					if (keys[KeyEvent.VK_LEFT]) {
+//						myPlayer.moveLeft();
+//					}
 				}
 				//update players
 				myPlayer.update(DX);
@@ -196,7 +205,7 @@ public class MainThread extends Thread {
 
 				tablero.repaint();
 				try {
-					Thread.sleep(1000 / UPDATE_RATE);
+					Thread.sleep(500 / UPDATE_RATE);
 				} catch (InterruptedException ex) {
 
 				}
