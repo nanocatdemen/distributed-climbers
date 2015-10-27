@@ -196,7 +196,7 @@ public class MainThread extends Thread {
 
 				tablero.repaint();
 				try {
-					Thread.sleep(1000 / UPDATE_RATE);
+					Thread.sleep(200 / UPDATE_RATE);
 				} catch (InterruptedException ex) {
 
 				}
