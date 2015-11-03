@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 public class Server extends UnicastRemoteObject implements IServer {
- 
+
 	/**
 	 * 
 	 */
@@ -22,14 +22,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.objects = new ArrayList<>();
 		this.paths = new ArrayList<>();
 		this.neighbours = new ArrayList<>();
-	}
-
-	//clone
-	public Server(IServer server) throws RemoteException {
-		this.setServerURL(server.getServerURL());
-		this.setObjects(server.getObjects());
-		this.setPaths(server.getPaths());
-		this.setNeighbours(server.getNeighbours());
 	}
 
 	@Override
@@ -58,17 +50,17 @@ public class Server extends UnicastRemoteObject implements IServer {
 		int i = this.paths.indexOf(path);
 		return this.objects.get(i);
 	}
-	
+
 	@Override
 	public void addNeighbour(String url) {
 		this.neighbours.add(url);
 	}
-	
+
 	@Override
 	public ArrayList<String> getNeighbours() {
 		return this.neighbours;
 	}
-	
+
 	@Override
 	public void publish() throws RemoteException, MalformedURLException {
 		Naming.rebind(this.urlServer + "server", this);
@@ -79,20 +71,23 @@ public class Server extends UnicastRemoteObject implements IServer {
 	public String getServerURL() throws RemoteException {
 		return this.urlServer;
 	}
-	
+
 	@Override
 	public void setServerURL(String url) throws RemoteException {
 		this.urlServer = url;
 	}
-	
+
 	@Override
 	public void migrateData(IServer destServer) throws RemoteException {
-		System.out.println("beforegetURL");
-		String url = destServer.getServerURL();
-		System.out.println("beforeClone");
-		destServer = new Server(this);
-		System.out.println("afterClone");
-		destServer.setServerURL(url);
+		ArrayList<Remote> obj = new ArrayList<Remote>();
+		ArrayList<String> path = new ArrayList<String>();
+		ArrayList<String> neigh = new ArrayList<String>();
+		obj.addAll(this.getObjects());
+		path.addAll(this.getPaths());
+		neigh.addAll(this.getNeighbours());
+		destServer.setObjects(obj);
+		destServer.setPaths(path);
+		destServer.setNeighbours(neigh);
 	}
 
 	@Override
