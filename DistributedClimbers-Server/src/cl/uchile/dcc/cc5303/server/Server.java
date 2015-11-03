@@ -87,8 +87,11 @@ public class Server extends UnicastRemoteObject implements IServer {
 	
 	@Override
 	public void migrateData(IServer destServer) throws RemoteException {
+		System.out.println("beforegetURL");
 		String url = destServer.getServerURL();
+		System.out.println("beforeClone");
 		destServer = new Server(this);
+		System.out.println("afterClone");
 		destServer.setServerURL(url);
 	}
 

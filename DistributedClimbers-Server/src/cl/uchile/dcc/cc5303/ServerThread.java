@@ -51,7 +51,9 @@ public class ServerThread extends Thread {
 			}
 			server.addNeighbour(externalUrl);
 			refServer.addNeighbour(URLSERVER);
+			System.out.println("Migration");
 			refServer.migrateData(server);
+			System.out.println("Migrated");
 		} // means create 
 		else {
 			NB_OF_PLAYERS = Integer.parseInt(args[1]);
