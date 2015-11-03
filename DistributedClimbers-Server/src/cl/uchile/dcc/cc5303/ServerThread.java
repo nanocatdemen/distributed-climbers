@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import cl.uchile.dcc.cc5303.server.IServer;
 import cl.uchile.dcc.cc5303.server.Server;
 
-public class ServerThread {
+public class ServerThread extends Thread {
 
 	public static String URLSERVER;
 	public static int NB_OF_PLAYERS, NB_OF_LIVES, WIDTH, HEIGHT;
@@ -32,35 +32,16 @@ public class ServerThread {
 			{275, 100, 9},
 			{350, 100, 10}
 	};
-	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
-		URLSERVER = "rmi://" + args[0] + "/iceClimbers/";
-		NB_OF_PLAYERS = Integer.parseInt(args[1]);
-		NB_OF_LIVES = Integer.parseInt(args[2]);
+	public ServerThread(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
 		WIDTH = 800;
 		HEIGHT = 600;
-
+		URLSERVER = "rmi://" + args[0] + "/iceClimbers/";
 		IServer server = new Server(URLSERVER);
-		IBenchManager manager = new BenchManager();
-		for(int i = 0; i < benches.length; i++){
-			IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
-			manager.add(bench);
-		}
-		IGestor gestor = new Gestor(NB_OF_PLAYERS, benches.length);
-		
-		for(int i = 0; i < NB_OF_PLAYERS; i++) {
-			server.set(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
-		}
-		server.set(manager, "benchManager");
-		server.set(gestor, "gestor");
-
-		server.serve();
-		server.publish();
-		
-		// Connect the server to the network
-		if(args.length > 3) {
-			String url = "rmi://" + args[3] + "/iceClimbers/";
+		// means join
+		if(args.length == 2) {
+			String externalUrl = "rmi://" + args[1] + "/iceClimbers/";
 			// TODO: throw error when the server is not found
-			IServer refServer = (IServer) Naming.lookup(url + "server");
+			IServer refServer = (IServer) Naming.lookup(externalUrl + "server");
 			ArrayList<String> neighbours = refServer.getNeighbours();
 			for (String neighbour : neighbours) {
 				// TODO: throw error when the server is not found
@@ -68,11 +49,32 @@ public class ServerThread {
 				server.addNeighbour(aServer.getServerURL());
 				aServer.addNeighbour(URLSERVER);
 			}
-			server.addNeighbour(url);
+			server.addNeighbour(externalUrl);
 			refServer.addNeighbour(URLSERVER);
-			System.out.println(server.getNeighbours());
-			System.out.println(refServer.getNeighbours());
+		} // means create 
+		else {
+			NB_OF_PLAYERS = Integer.parseInt(args[1]);
+			NB_OF_LIVES = Integer.parseInt(args[2]);
+			IBenchManager manager = new BenchManager();
+			for(int i = 0; i < benches.length; i++){
+				IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
+				manager.add(bench);
+			}
+			IGestor gestor = new Gestor(NB_OF_PLAYERS, benches.length);
+			
+			for(int i = 0; i < NB_OF_PLAYERS; i++) {
+				server.set(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
+			}
+			server.set(manager, "benchManager");
+			server.set(gestor, "gestor");
 		}
+		server.serve();
+		server.publish();
+	}
+	
+	@Override
+	public void run() {
+		return;
 	}
 
 }

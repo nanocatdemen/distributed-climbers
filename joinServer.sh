@@ -3,14 +3,6 @@ if [ -z "$1" ]
   exit
 fi
 if [ -z "$2" ]
-  then echo "Please provide the number of players."
-  exit
-fi
-if [ -z "$3" ]
-  then echo "Please provide the number of lives."
-  exit
-fi
-if [ -z "$4" ]
   then echo "Please provide the IP to the network."
   exit
 fi
@@ -22,10 +14,10 @@ javac -d DistributedClimbers-Server/bin/  DistributedClimbers-Server/src/cl/uchi
 javac -cp DistributedClimbers-Server/bin/ -d DistributedClimbers-Server/bin/ DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
 # Restart rmiregistry
 echo "Releasing port..."
-#fuser -k 1099/tcp
+fuser -k 1099/tcp
 echo "Starting rmiregistry..."
 cd DistributedClimbers-Server/bin
-#rmiregistry &
+rmiregistry &
 # Run server
 echo "Starting server..."
-java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.ServerThread $1 $2 $3 $4
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.ServerThread $1 $2
