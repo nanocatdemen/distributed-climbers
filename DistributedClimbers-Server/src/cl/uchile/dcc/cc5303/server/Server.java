@@ -24,6 +24,14 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.neighbours = new ArrayList<>();
 	}
 
+	//clone
+	public Server(IServer server) throws RemoteException {
+		this.urlServer = server.getServerURL();
+		this.objects = server.getObjects();
+		this.paths = server.getPaths();
+		this.neighbours = server.getNeighbours();
+	}
+
 	@Override
 	public void serve() throws RemoteException, MalformedURLException {
 		int i = 0;
@@ -70,6 +78,38 @@ public class Server extends UnicastRemoteObject implements IServer {
 	@Override
 	public String getServerURL() throws RemoteException {
 		return this.urlServer;
+	}
+	
+	@Override
+	public void setServerURL(String url) throws RemoteException {
+		this.urlServer = url;
+	}
+	
+	@Override
+	public void migrateData(IServer destServer) throws RemoteException {
+		String url = destServer.getServerURL();
+		destServer = new Server(this);
+		destServer.setServerURL(url);
+	}
+
+	public ArrayList<Remote> getObjects() {
+		return objects;
+	}
+
+	public void setObjects(ArrayList<Remote> objects) {
+		this.objects = objects;
+	}
+
+	public ArrayList<String> getPaths() {
+		return paths;
+	}
+
+	public void setPaths(ArrayList<String> paths) {
+		this.paths = paths;
+	}
+
+	public void setNeighbours(ArrayList<String> neighbours) {
+		this.neighbours = neighbours;
 	}
 
 }

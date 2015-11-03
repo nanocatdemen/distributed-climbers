@@ -20,4 +20,4 @@ cd DistributedClimbers-Server/bin
 rmiregistry &
 # Run server
 echo "Starting server..."
-java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.ServerThread $1 $2
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Main $1 $2

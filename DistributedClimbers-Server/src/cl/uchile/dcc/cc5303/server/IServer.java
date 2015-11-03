@@ -20,5 +20,19 @@ public interface IServer extends Remote {
 	ArrayList<String> getNeighbours() throws RemoteException;
 
 	String getServerURL() throws RemoteException;
+	
+	public void setServerURL(String url) throws RemoteException;
+	
+	public void migrateData(IServer destServer) throws RemoteException;
+	
+	public ArrayList<Remote> getObjects() throws RemoteException;
+
+	public void setObjects(ArrayList<Remote> objects) throws RemoteException;
+
+	public ArrayList<String> getPaths() throws RemoteException;
+
+	public void setPaths(ArrayList<String> paths) throws RemoteException;
+
+	public void setNeighbours(ArrayList<String> neighbours) throws RemoteException;
 
 }

@@ -51,6 +51,7 @@ public class ServerThread extends Thread {
 			}
 			server.addNeighbour(externalUrl);
 			refServer.addNeighbour(URLSERVER);
+			refServer.migrateData(server);
 		} // means create 
 		else {
 			NB_OF_PLAYERS = Integer.parseInt(args[1]);
@@ -74,7 +75,9 @@ public class ServerThread extends Thread {
 	
 	@Override
 	public void run() {
-		return;
+		while(true) {
+			
+		}
 	}
 
 }
