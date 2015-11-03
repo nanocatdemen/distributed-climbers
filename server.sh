@@ -10,12 +10,12 @@ if [ -z "$3" ]
   then echo "Please provide the number of lives."
   exit
 fi
+# Make directory if not exists
+mkdir -p DistributedClimbers-Server/bin/cl/uchile/dcc/cc5303/server
 # Compile files
 echo "Compiling..."
-javac DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
-# Move to bin folder to keep order
-mkdir -p DistributedClimbers-Server/bin/cl/uchile/dcc/cc5303/
-mv DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.class DistributedClimbers-Server/bin/cl/uchile/dcc/cc5303/
+javac -d DistributedClimbers-Server/bin/  DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/server/*.java
+javac -cp DistributedClimbers-Server/bin/ -d DistributedClimbers-Server/bin/ DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
 # Restart rmiregistry
 echo "Releasing port..."
 fuser -k 1099/tcp
@@ -24,4 +24,4 @@ cd DistributedClimbers-Server/bin
 rmiregistry &
 # Run server
 echo "Starting server..."
-java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Server $1 $2 $3
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.ServerThread $1 $2 $3
