@@ -1,7 +1,12 @@
 package cl.uchile.dcc.cc5303;
 
 import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+
+import cl.uchile.dcc.cc5303.server.IServer;
 import cl.uchile.dcc.cc5303.server.Server;
 
 public class ServerThread {
@@ -27,14 +32,14 @@ public class ServerThread {
 			{275, 100, 9},
 			{350, 100, 10}
 	};
-	public static void main(String[] args) throws RemoteException, MalformedURLException {
+	public static void main(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
 		URLSERVER = "rmi://" + args[0] + "/iceClimbers/";
 		NB_OF_PLAYERS = Integer.parseInt(args[1]);
 		NB_OF_LIVES = Integer.parseInt(args[2]);
 		WIDTH = 800;
 		HEIGHT = 600;
 
-		Server server = new Server(URLSERVER);
+		IServer server = new Server(URLSERVER);
 		IBenchManager manager = new BenchManager();
 		for(int i = 0; i < benches.length; i++){
 			IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
@@ -49,6 +54,25 @@ public class ServerThread {
 		server.set(gestor, "gestor");
 
 		server.serve();
+		server.publish();
+		
+		// Connect the server to the network
+		if(args.length > 3) {
+			String url = "rmi://" + args[3] + "/iceClimbers/";
+			// TODO: throw error when the server is not found
+			IServer refServer = (IServer) Naming.lookup(url + "server");
+			ArrayList<String> neighbours = refServer.getNeighbours();
+			for (String neighbour : neighbours) {
+				// TODO: throw error when the server is not found
+				IServer aServer = (IServer) Naming.lookup("rmi://" + neighbour + "/iceClimbers/server");
+				server.addNeighbour(aServer.getServerURL());
+				aServer.addNeighbour(URLSERVER);
+			}
+			server.addNeighbour(url);
+			refServer.addNeighbour(URLSERVER);
+			System.out.println(server.getNeighbours());
+			System.out.println(refServer.getNeighbours());
+		}
 	}
 
 }
