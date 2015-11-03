@@ -21,7 +21,7 @@ public class Server {
 		int i = 0;
 		for(Remote o : objects) {
 			Naming.rebind(this.urlServer + paths.get(i), o);
-			System.out.println(o.getClass() + " published in: " + this.urlServer + this.paths.get(i++));
+			System.out.println("Instance of " + o.getClass() + " published in: " + this.urlServer + this.paths.get(i++));
 		}
 	}
 	
