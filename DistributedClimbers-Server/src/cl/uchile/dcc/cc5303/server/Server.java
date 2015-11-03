@@ -25,9 +25,15 @@ public class Server {
 		}
 	}
 	
-	public void add(Remote o, String path) {
-		objects.add(o);
-		paths.add(path);
+	public void set(Remote o, String path) {
+		int i = paths.indexOf(path);
+		if (i != -1) {
+			paths.set(i, path);
+			objects.set(i, o);
+		} else {
+			paths.add(path);
+			objects.add(o);
+		}
 	}
 	
 	public Remote get(String path) {

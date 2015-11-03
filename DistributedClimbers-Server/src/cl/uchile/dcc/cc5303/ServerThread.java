@@ -43,10 +43,10 @@ public class ServerThread {
 		IGestor gestor = new Gestor(NB_OF_PLAYERS, benches.length);
 		
 		for(int i = 0; i < NB_OF_PLAYERS; i++) {
-			server.add(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
+			server.set(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
 		}
-		server.add(manager, "benchManager");
-		server.add(gestor, "gestor");
+		server.set(manager, "benchManager");
+		server.set(gestor, "gestor");
 
 		server.serve();
 	}
