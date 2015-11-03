@@ -26,10 +26,10 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	//clone
 	public Server(IServer server) throws RemoteException {
-		this.urlServer = server.getServerURL();
-		this.objects = server.getObjects();
-		this.paths = server.getPaths();
-		this.neighbours = server.getNeighbours();
+		this.setServerURL(server.getServerURL());
+		this.setObjects(server.getObjects());
+		this.setPaths(server.getPaths());
+		this.setNeighbours(server.getNeighbours());
 	}
 
 	@Override
@@ -95,22 +95,27 @@ public class Server extends UnicastRemoteObject implements IServer {
 		destServer.setServerURL(url);
 	}
 
+	@Override
 	public ArrayList<Remote> getObjects() {
 		return objects;
 	}
 
+	@Override
 	public void setObjects(ArrayList<Remote> objects) {
 		this.objects = objects;
 	}
 
+	@Override
 	public ArrayList<String> getPaths() {
 		return paths;
 	}
 
+	@Override
 	public void setPaths(ArrayList<String> paths) {
 		this.paths = paths;
 	}
 
+	@Override
 	public void setNeighbours(ArrayList<String> neighbours) {
 		this.neighbours = neighbours;
 	}

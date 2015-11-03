@@ -52,6 +52,8 @@ public class ServerThread extends Thread {
 			server.addNeighbour(externalUrl);
 			refServer.addNeighbour(URLSERVER);
 			System.out.println("Migration");
+			System.out.println(server);
+			System.out.println(refServer);
 			refServer.migrateData(server);
 			System.out.println("Migrated");
 		} // means create 
