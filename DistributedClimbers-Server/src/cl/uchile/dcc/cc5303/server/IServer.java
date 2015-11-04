@@ -1,6 +1,7 @@
 package cl.uchile.dcc.cc5303.server;
 
 import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public interface IServer extends Remote {
 	
 	public void setServerURL(String url) throws RemoteException;
 	
-	public void migrateData(IServer destServer) throws RemoteException, MalformedURLException;
+	public void migrateData(IServer destServer) throws RemoteException, MalformedURLException, NotBoundException;
 	
 	public ArrayList<Remote> getObjects() throws RemoteException;
 
