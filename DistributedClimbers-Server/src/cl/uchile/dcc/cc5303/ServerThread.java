@@ -51,11 +51,8 @@ public class ServerThread extends Thread {
 			}
 			server.addNeighbour(externalUrl);
 			refServer.addNeighbour(URLSERVER);
-			System.out.println("Migration");
-			System.out.println(server);
-			System.out.println(refServer);
-			refServer.migrateData(server);
-			System.out.println("Migrated");
+			// migrate data
+			server.migrateData(refServer);
 		} // means create 
 		else {
 			NB_OF_PLAYERS = Integer.parseInt(args[1]);
@@ -72,8 +69,8 @@ public class ServerThread extends Thread {
 			}
 			server.set(manager, "benchManager");
 			server.set(gestor, "gestor");
+			server.serve();
 		}
-		server.serve();
 		server.publish();
 	}
 	

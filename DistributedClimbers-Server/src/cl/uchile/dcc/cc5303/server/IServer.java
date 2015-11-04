@@ -23,7 +23,7 @@ public interface IServer extends Remote {
 	
 	public void setServerURL(String url) throws RemoteException;
 	
-	public void migrateData(IServer destServer) throws RemoteException;
+	public void migrateData(IServer destServer) throws RemoteException, MalformedURLException;
 	
 	public ArrayList<Remote> getObjects() throws RemoteException;
 

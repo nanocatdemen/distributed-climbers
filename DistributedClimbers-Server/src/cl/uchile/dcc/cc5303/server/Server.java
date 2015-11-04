@@ -78,16 +78,12 @@ public class Server extends UnicastRemoteObject implements IServer {
 	}
 
 	@Override
-	public void migrateData(IServer destServer) throws RemoteException {
-		ArrayList<Remote> obj = new ArrayList<Remote>();
-		ArrayList<String> path = new ArrayList<String>();
-		ArrayList<String> neigh = new ArrayList<String>();
-		obj.addAll(this.getObjects());
-		path.addAll(this.getPaths());
-		neigh.addAll(this.getNeighbours());
-		destServer.setObjects(obj);
-		destServer.setPaths(path);
-		destServer.setNeighbours(neigh);
+	public void migrateData(IServer destServer) throws RemoteException, MalformedURLException {
+		int i = 0;
+		for(Remote o : this.objects) {
+			Naming.rebind(destServer.getServerURL() + destServer.getPaths().get(i), o);
+			System.out.println("Instance of " + o.getClass() + " published in: " + destServer.getServerURL() + destServer.getPaths().get(i++));
+		}
 	}
 
 	@Override
