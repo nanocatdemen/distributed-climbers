@@ -38,4 +38,10 @@ public interface IGestor extends Remote {
 	
 	Mutex getMutex() throws RemoteException;
 	
+	void pause() throws RemoteException;
+	
+	void resume() throws RemoteException;
+	
+	boolean isPaused() throws RemoteException;
+	
 }

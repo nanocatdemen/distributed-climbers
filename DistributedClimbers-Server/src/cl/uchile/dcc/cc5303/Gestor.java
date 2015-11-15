@@ -15,6 +15,8 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	int nbOfBenches;
 	int[] score;
 	int dead = 0;
+	boolean pause = false;
+	
 	
 	public Gestor(int players, int benches) throws RemoteException {
 		taken = new ArrayList<Boolean>();
@@ -161,6 +163,21 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	@Override
 	public Mutex getMutex() throws RemoteException {
 		return lock;
+	}
+
+	@Override
+	public void pause() throws RemoteException {
+		pause = true;
+	}
+
+	@Override
+	public void resume() throws RemoteException {
+		pause = false;
+	}
+
+	@Override
+	public boolean isPaused() throws RemoteException {
+		return pause;
 	}
 
 }

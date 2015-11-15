@@ -100,6 +100,15 @@ public class MainThread extends Thread {
 			}
 			while (true) { // Main loop
 				//Check game state
+				//Check Pause
+				while(gestor.isPaused()){
+					//Listen to Unpause
+					if(keys[KeyEvent.VK_P]) {
+						gestor.resume();
+						tablero.repaint();
+					}
+				}
+				//Check Game Over
 				tablero.isGameOver = false;
 				if(gestor.gameOver(allPlayers)) {
 					for(int i = 0; i<gestor.getNbOfPlayers(); i++){
@@ -139,6 +148,9 @@ public class MainThread extends Thread {
 						System.exit(0);
 					}
 				}
+
+				
+				
 				// Check controls
 				else {
 					if (keys[KeyEvent.VK_UP]) {
@@ -149,6 +161,9 @@ public class MainThread extends Thread {
 					}
 					if (keys[KeyEvent.VK_LEFT]) {
 						myPlayer.moveLeft();
+					}
+					if(keys[KeyEvent.VK_P]) {
+						gestor.pause();
 					}
 				}
 				//update players
