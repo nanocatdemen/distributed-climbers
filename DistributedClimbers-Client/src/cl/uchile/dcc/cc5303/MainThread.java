@@ -155,14 +155,16 @@ public class MainThread extends Thread {
 						myPlayer.moveLeft();
 					}
 					if (keys[KeyEvent.VK_M]) {
-						String anotherServerURL = "rmi://" + server.getNeighbours().get(0) + ":1099/iceClimbers";
-						server = (IServer) Naming.lookup(anotherServerURL + "/server");
-						gestor = (IGestor) Naming.lookup(anotherServerURL + "/gestor");
-						myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "/player" + myID);
+						String anotherServerURL = server.getNeighbours().get(0);
+						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+						anotherServer.migrateData(server);
+						server = anotherServer;
+						gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
+						myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
 						for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
-							allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "/player" + i));
+							allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
 						}
-						benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "/benchManager");
+						benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
 					}
 				}
 				//update players
