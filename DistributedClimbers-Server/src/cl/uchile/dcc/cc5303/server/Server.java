@@ -76,6 +76,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 		for(String path : this.players.keySet()) {
 			IPlayer remotePlayer = sourceServer.getPlayer(path);
 			this.players.get(path).setLives(remotePlayer.getLives());
+			this.players.get(path).setWaiting(remotePlayer.isWaiting());
+			this.players.get(path).setAlive(remotePlayer.isAlive());
 			this.players.get(path).setPosX(remotePlayer.getPosX());
 			this.players.get(path).setPosY(remotePlayer.getPosY());
 		}
