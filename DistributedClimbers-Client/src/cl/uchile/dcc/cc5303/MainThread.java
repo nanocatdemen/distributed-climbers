@@ -11,6 +11,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import cl.uchile.dcc.cc5303.server.IServer;
+
 public class MainThread extends Thread {
 	public boolean[] keys;
 	private final static String TITLE = "Juego - CC5303";
@@ -30,6 +32,7 @@ public class MainThread extends Thread {
 	//private ArrayList<IBench> allBenches;
 	private IBenchManager benchManager;
 	private IGestor gestor;
+	private IServer server;
 	private int myID;
 
 	int frames = new Random().nextInt(2 * framesToNewBench);
@@ -42,6 +45,7 @@ public class MainThread extends Thread {
 		allPlayers = new ArrayList<IPlayer>();
 		//allBenches = new ArrayList<IBench>();
 		try {
+			server = (IServer) Naming.lookup(urlServer + "/server");
 			gestor = (IGestor) Naming.lookup(urlServer + "/gestor");
 			myID = gestor.giffPlayer();
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "/player" + myID);
@@ -150,6 +154,16 @@ public class MainThread extends Thread {
 					if (keys[KeyEvent.VK_LEFT]) {
 						myPlayer.moveLeft();
 					}
+					if (keys[KeyEvent.VK_M]) {
+						String anotherServerURL = "rmi://" + server.getNeighbours().get(0) + ":1099/iceClimbers";
+						server = (IServer) Naming.lookup(anotherServerURL + "/server");
+						gestor = (IGestor) Naming.lookup(anotherServerURL + "/gestor");
+						myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "/player" + myID);
+						for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
+							allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "/player" + i));
+						}
+						benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "/benchManager");
+					}
 				}
 				//update players
 				myPlayer.update(DX);
@@ -202,7 +216,7 @@ public class MainThread extends Thread {
 				}
 			}
 		}
-		catch (RemoteException e){
+		catch (RemoteException | MalformedURLException | NotBoundException e){
 			e.printStackTrace();
 		}
 	}
