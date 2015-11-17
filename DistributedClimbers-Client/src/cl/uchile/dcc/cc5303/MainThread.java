@@ -170,7 +170,7 @@ public class MainThread extends Thread {
 						benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
 						// TODO: notify other clients about the migration
 						try {
-							Thread.sleep(1000 / UPDATE_RATE);
+							Thread.sleep(1000);
 						} catch (InterruptedException ex) {
 
 						}
