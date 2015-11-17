@@ -154,6 +154,7 @@ public class MainThread extends Thread {
 					if (keys[KeyEvent.VK_LEFT]) {
 						myPlayer.moveLeft();
 					}
+					//Initialize migration
 					if (keys[KeyEvent.VK_M]) {
 						String anotherServerURL = server.getNeighbours().get(0);
 						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
@@ -165,6 +166,12 @@ public class MainThread extends Thread {
 							allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
 						}
 						benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
+						// TODO: notify other clients about the migration
+						try {
+							Thread.sleep(1000 / UPDATE_RATE);
+						} catch (InterruptedException ex) {
+
+						}
 					}
 				}
 				//update players
