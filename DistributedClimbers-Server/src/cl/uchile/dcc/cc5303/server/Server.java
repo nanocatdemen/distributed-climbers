@@ -78,8 +78,11 @@ public class Server extends UnicastRemoteObject implements IServer {
 	}
 
 	@Override
-	public void migrateData(IServer destServer) throws RemoteException {
-		return;
+	public void migrateData(IServer sourceServer) throws RemoteException {
+		int i = 0;
+		for(Remote o : this.objects) {
+			this.objects.set(i, sourceServer.getObjects().get(i));
+		}
 	}
 
 	@Override
@@ -106,5 +109,12 @@ public class Server extends UnicastRemoteObject implements IServer {
 	public void setNeighbours(ArrayList<String> neighbours) {
 		this.neighbours = neighbours;
 	}
+
+	@Override
+	public int playerSize() throws RemoteException {
+		return this.paths.size()-2;
+	}
+	
+	
 
 }

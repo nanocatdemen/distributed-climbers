@@ -37,7 +37,8 @@ public class ServerThread extends Thread {
 		HEIGHT = 600;
 		URLSERVER = "rmi://" + args[0] + "/iceClimbers/";
 		IServer server = new Server(URLSERVER);
-		// means join
+		// means join, connects to the given server and gets how many players are published
+		// then publish the same amount of players.
 		if(args.length == 2) {
 			String externalUrl = "rmi://" + args[1] + "/iceClimbers/";
 			// TODO: throw error when the server is not found
@@ -51,8 +52,26 @@ public class ServerThread extends Thread {
 			}
 			server.addNeighbour(externalUrl);
 			refServer.addNeighbour(URLSERVER);
+
+			int nPlayers = refServer.playerSize();
+			
+			// Data does not matter, just initialization
+			IBenchManager manager = new BenchManager();
+			for(int i = 0; i < benches.length; i++){
+				IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
+				manager.add(bench);
+			}
+			IGestor gestor = new Gestor(nPlayers, benches.length);
+
+			for(int i = 0; i < nPlayers; i++) {
+				server.set(new Player(100 + WIDTH/4*(i), HEIGHT - 50, 1), "player" + i);
+			}
+			server.set(manager, "benchManager");
+			server.set(gestor, "gestor");
+			server.serve();
 			// migrate data
 			server.migrateData(refServer);
+			System.out.println(((IPlayer) server.getObjects().get(0)).getLives());
 		} // means create 
 		else {
 			NB_OF_PLAYERS = Integer.parseInt(args[1]);
