@@ -78,11 +78,12 @@ public class Server extends UnicastRemoteObject implements IServer {
 	}
 
 	@Override
-	public void migrateData(IServer sourceServer) throws RemoteException {
+	public void migrateData(IServer sourceServer) throws RemoteException, MalformedURLException {
 		int i = 0;
 		for(Remote o : this.objects) {
 			this.objects.set(i, sourceServer.getObjects().get(i));
 		}
+		this.serve();
 	}
 
 	@Override
