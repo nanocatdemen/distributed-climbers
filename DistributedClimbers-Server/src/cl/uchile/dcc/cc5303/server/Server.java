@@ -1,10 +1,12 @@
 package cl.uchile.dcc.cc5303.server;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import cl.uchile.dcc.cc5303.*;
 
 public class Server extends UnicastRemoteObject implements IServer {
 
@@ -13,42 +15,33 @@ public class Server extends UnicastRemoteObject implements IServer {
 	 */
 	private static final long serialVersionUID = 1L;
 	String urlServer;
-	ArrayList<Remote> objects;
-	ArrayList<String> paths;
+	HashMap<String,IPlayer> players;
+	HashMap<String,IGestor> gestor;
+	HashMap<String,IBenchManager> benchmanager;
 	ArrayList<String> neighbours;
 
 	public Server(String urlServer) throws RemoteException {
 		this.urlServer = urlServer;
-		this.objects = new ArrayList<>();
-		this.paths = new ArrayList<>();
+		this.players = new HashMap<>();
+		this.gestor = new HashMap<>();
+		this.benchmanager = new HashMap<>();
 		this.neighbours = new ArrayList<>();
 	}
 
 	@Override
 	public void serve() throws RemoteException, MalformedURLException {
-		int i = 0;
-		for(Remote o : this.objects) {
-			Naming.rebind(this.urlServer + this.paths.get(i), o);
-			System.out.println("Instance of " + o.getClass() + " published in: " + this.urlServer + this.paths.get(i++));
+		for(String key : this.players.keySet()) {
+			Naming.rebind(this.urlServer + key, this.players.get(key));
+			System.out.println("Instance of " + this.players.get(key).getClass() + " published in: " + this.urlServer + key);
 		}
-	}
-
-	@Override
-	public void set(Remote o, String path) {
-		int i = this.paths.indexOf(path);
-		if (i != -1) {
-			this.paths.set(i, path);
-			this.objects.set(i, o);
-		} else {
-			this.paths.add(path);
-			this.objects.add(o);
+		for(String key : this.gestor.keySet()) {
+			Naming.rebind(this.urlServer + key, this.gestor.get(key));
+			System.out.println("Instance of " + this.gestor.get(key).getClass() + " published in: " + this.urlServer + key);
 		}
-	}
-
-	@Override
-	public Remote get(String path) {
-		int i = this.paths.indexOf(path);
-		return this.objects.get(i);
+		for(String key : this.benchmanager.keySet()) {
+			Naming.rebind(this.urlServer + key, this.benchmanager.get(key));
+			System.out.println("Instance of " + this.benchmanager.get(key).getClass() + " published in: " + this.urlServer + key);
+		}
 	}
 
 	@Override
@@ -77,33 +70,15 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.urlServer = url;
 	}
 
+	// For now only migrate players...
 	@Override
 	public void migrateData(IServer sourceServer) throws RemoteException, MalformedURLException {
-		int i = 0;
-		for(Remote o : this.objects) {
-			this.objects.set(i, sourceServer.getObjects().get(i));
+		for(String path : this.players.keySet()) {
+			IPlayer remotePlayer = sourceServer.getPlayer(path);
+			this.players.get(path).setLives(remotePlayer.getLives());
+			this.players.get(path).setPosX(remotePlayer.getPosX());
+			this.players.get(path).setPosY(remotePlayer.getPosY());
 		}
-		this.serve();
-	}
-
-	@Override
-	public ArrayList<Remote> getObjects() {
-		return objects;
-	}
-
-	@Override
-	public void setObjects(ArrayList<Remote> objects) {
-		this.objects = objects;
-	}
-
-	@Override
-	public ArrayList<String> getPaths() {
-		return paths;
-	}
-
-	@Override
-	public void setPaths(ArrayList<String> paths) {
-		this.paths = paths;
 	}
 
 	@Override
@@ -113,9 +88,37 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	@Override
 	public int playerSize() throws RemoteException {
-		return this.paths.size()-2;
+		return this.players.size();
 	}
-	
-	
+
+	@Override
+	public void addPlayer(IPlayer p, String path) throws RemoteException {
+		this.players.put(path, p);
+	}
+
+	@Override
+	public void addGestor(IGestor g, String path) throws RemoteException {
+		this.gestor.put(path, g);
+	}
+
+	@Override
+	public void addBenchManager(IBenchManager b, String path) throws RemoteException {
+		this.benchmanager.put(path, b);
+	}
+
+	@Override
+	public IPlayer getPlayer(String path) throws RemoteException {
+		return this.players.get(path);
+	}
+
+	@Override
+	public IGestor getGestor(String path) throws RemoteException {
+		return this.gestor.get(path);
+	}
+
+	@Override
+	public IBenchManager getBenchManager(String path) throws RemoteException {
+		return this.benchmanager.get(path);
+	}
 
 }

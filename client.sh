@@ -7,7 +7,7 @@ mkdir -p DistributedClimbers-Client/bin/cl/uchile/dcc/cc5303/
 mkdir -p DistributedClimbers-Server/bin/cl/uchile/dcc/cc5303/server
 # Compile files
 echo "Compiling..."
-javac -d DistributedClimbers-Server/bin/  DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/server/*.java
+javac -cp DistributedClimbers-Server/bin/ -d DistributedClimbers-Server/bin/ DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/server/*.java
 javac -cp DistributedClimbers-Server/bin/ -d DistributedClimbers-Server/bin/ DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
 javac -sourcepath DistributedClimbers-Server/src/ -d DistributedClimbers-Client/bin/ DistributedClimbers-Client/src/cl/uchile/dcc/cc5303/*.java
 # Run client

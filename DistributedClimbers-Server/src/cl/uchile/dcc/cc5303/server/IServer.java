@@ -6,13 +6,23 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import cl.uchile.dcc.cc5303.*;
+
 public interface IServer extends Remote {
 
 	void serve() throws RemoteException, MalformedURLException;
-
-	void set(Remote o, String path) throws RemoteException;
-
-	Remote get(String path) throws RemoteException;
+	
+	void addPlayer(IPlayer p, String path) throws RemoteException;
+	
+	void addGestor(IGestor g, String path) throws RemoteException;
+	
+	void addBenchManager(IBenchManager b, String path) throws RemoteException;
+	
+	IPlayer getPlayer(String path) throws RemoteException;
+	
+	IGestor getGestor(String path) throws RemoteException;
+	
+	IBenchManager getBenchManager(String path) throws RemoteException;
 
 	void addNeighbour(String url) throws RemoteException;
 
@@ -26,14 +36,6 @@ public interface IServer extends Remote {
 	
 	public void migrateData(IServer destServer) throws RemoteException, MalformedURLException, NotBoundException;
 	
-	public ArrayList<Remote> getObjects() throws RemoteException;
-
-	public void setObjects(ArrayList<Remote> objects) throws RemoteException;
-
-	public ArrayList<String> getPaths() throws RemoteException;
-
-	public void setPaths(ArrayList<String> paths) throws RemoteException;
-
 	public void setNeighbours(ArrayList<String> neighbours) throws RemoteException;
 
 	public int playerSize() throws RemoteException;

@@ -14,7 +14,7 @@ fi
 mkdir -p DistributedClimbers-Server/bin/cl/uchile/dcc/cc5303/server
 # Compile files
 echo "Compiling..."
-javac -d DistributedClimbers-Server/bin/  DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/server/*.java
+javac -cp DistributedClimbers-Server/bin/ -d DistributedClimbers-Server/bin/ DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/server/*.java
 javac -cp DistributedClimbers-Server/bin/ -d DistributedClimbers-Server/bin/ DistributedClimbers-Server/src/cl/uchile/dcc/cc5303/*.java
 # Restart rmiregistry
 echo "Releasing port..."

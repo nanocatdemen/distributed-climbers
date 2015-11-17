@@ -64,30 +64,31 @@ public class ServerThread extends Thread {
 			IGestor gestor = new Gestor(nPlayers, benches.length);
 
 			for(int i = 0; i < nPlayers; i++) {
-				server.set(new Player(100 + WIDTH/4*(i), HEIGHT - 50, 1), "player" + i);
+				server.addPlayer(new Player(100 + WIDTH/4*(i), HEIGHT - 50, 1), "player" + i);
 			}
-			server.set(manager, "benchManager");
-			server.set(gestor, "gestor");
-			server.serve();
+			server.addBenchManager(manager, "benchManager");
+			server.addGestor(gestor, "gestor");
+			//server.serve();
 			// migrate data
 			server.migrateData(refServer);
-			System.out.println(((IPlayer) server.getObjects().get(0)).getLives());
+			server.serve();
+			//System.out.println(((IPlayer) server.getObjects().get(0)).getLives());
 		} // means create 
 		else {
 			NB_OF_PLAYERS = Integer.parseInt(args[1]);
 			NB_OF_LIVES = Integer.parseInt(args[2]);
 			IBenchManager manager = new BenchManager();
 			for(int i = 0; i < benches.length; i++){
-				IBench bench = new Bench(benches[i][0],benches[i][1],benches[i][2]);
+				IBench bench = new Bench(benches[i][0], benches[i][1], benches[i][2]);
 				manager.add(bench);
 			}
 			IGestor gestor = new Gestor(NB_OF_PLAYERS, benches.length);
 			
 			for(int i = 0; i < NB_OF_PLAYERS; i++) {
-				server.set(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
+				server.addPlayer(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
 			}
-			server.set(manager, "benchManager");
-			server.set(gestor, "gestor");
+			server.addBenchManager(manager, "benchManager");
+			server.addGestor(gestor, "gestor");
 			server.serve();
 		}
 		server.publish();
