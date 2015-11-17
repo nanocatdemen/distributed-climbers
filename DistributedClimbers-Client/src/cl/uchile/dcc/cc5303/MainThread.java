@@ -160,6 +160,8 @@ public class MainThread extends Thread {
 						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
 						anotherServer.migrateData(server);
 						server = anotherServer;
+						System.out.println(server.getServerURL());
+						System.out.println(server.getNeighbours());
 						gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
 						myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
 						for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
