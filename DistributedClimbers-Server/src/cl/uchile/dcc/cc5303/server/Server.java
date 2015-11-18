@@ -19,6 +19,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 	HashMap<String,IGestor> gestor;
 	HashMap<String,IBenchManager> benchmanager;
 	ArrayList<String> neighbours;
+	ArrayList<Boolean> needMigrate;
 
 	public Server(String urlServer) throws RemoteException {
 		this.urlServer = urlServer;
@@ -26,6 +27,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.gestor = new HashMap<>();
 		this.benchmanager = new HashMap<>();
 		this.neighbours = new ArrayList<>();
+		this.needMigrate = new ArrayList<>();
 	}
 
 	@Override
@@ -33,6 +35,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 		for(String key : this.players.keySet()) {
 			Naming.rebind(this.urlServer + key, this.players.get(key));
 			System.out.println("Instance of " + this.players.get(key).getClass() + " published in: " + this.urlServer + key);
+			this.needMigrate.add(false);
 		}
 		for(String key : this.gestor.keySet()) {
 			Naming.rebind(this.urlServer + key, this.gestor.get(key));
@@ -121,6 +124,16 @@ public class Server extends UnicastRemoteObject implements IServer {
 	@Override
 	public IBenchManager getBenchManager(String path) throws RemoteException {
 		return this.benchmanager.get(path);
+	}
+	
+	@Override
+	public ArrayList<Boolean> needMigrate() {
+		return this.needMigrate;
+	}
+	
+	@Override
+	public void setNeedMigrate(ArrayList<Boolean> b) {
+		this.needMigrate = b;
 	}
 
 }

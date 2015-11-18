@@ -39,5 +39,9 @@ public interface IServer extends Remote {
 	public void setNeighbours(ArrayList<String> neighbours) throws RemoteException;
 
 	public int playerSize() throws RemoteException;
+	
+	public ArrayList<Boolean> needMigrate() throws RemoteException;
+	
+	public void setNeedMigrate(ArrayList<Boolean> b) throws RemoteException;
 
 }
