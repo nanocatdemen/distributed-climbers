@@ -3,11 +3,7 @@ if [ -z "$1" ]
   exit
 fi
 if [ -z "$2" ]
-  then echo "Please provide the number of players."
-  exit
-fi
-if [ -z "$3" ]
-  then echo "Please provide the number of lives."
+  then echo "Please provide the IP to the network."
   exit
 fi
 # Make directory if not exists
@@ -24,4 +20,4 @@ cd DistributedClimbers-Server/bin
 rmiregistry &
 # Run server
 echo "Starting server..."
-java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Main $1 $2 $3
+java -Djava.rmi.server.hostname=$1 cl.uchile.dcc.cc5303.Main $1 $2

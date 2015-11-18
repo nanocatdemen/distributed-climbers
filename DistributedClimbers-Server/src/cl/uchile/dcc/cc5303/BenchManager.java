@@ -3,7 +3,6 @@ package cl.uchile.dcc.cc5303;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class BenchManager extends UnicastRemoteObject implements IBenchManager{
 	

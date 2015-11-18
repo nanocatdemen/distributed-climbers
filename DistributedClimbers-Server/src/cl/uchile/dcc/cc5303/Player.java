@@ -58,11 +58,6 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 		g.fillRect(this.posX, this.posY, this.w, this.h);
 	}
 
-	//	@Override
-	//    public String toString(){
-		//        return "player: position ("+this.posX+","+this.posY+")";
-		//    }
-
 	@Override
 	public boolean collideBench(IBench b) throws RemoteException{
 		return Math.abs(bottom() - b.top()) < 5 && right() <= b.right() && left() >= b.left();
@@ -209,5 +204,10 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public boolean isAlive(){
 		return this.alive;
+	}
+	
+	@Override
+	public void setAlive(boolean b){
+		this.alive = b;
 	}
 }

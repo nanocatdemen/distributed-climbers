@@ -11,6 +11,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import cl.uchile.dcc.cc5303.server.IServer;
+
 public class MainThread extends Thread {
 	public boolean[] keys;
 	private final static String TITLE = "Juego - CC5303";
@@ -30,6 +32,7 @@ public class MainThread extends Thread {
 	//private ArrayList<IBench> allBenches;
 	private IBenchManager benchManager;
 	private IGestor gestor;
+	private IServer server;
 	private int myID;
 
 	int frames = new Random().nextInt(2 * framesToNewBench);
@@ -42,6 +45,7 @@ public class MainThread extends Thread {
 		allPlayers = new ArrayList<IPlayer>();
 		//allBenches = new ArrayList<IBench>();
 		try {
+			server = (IServer) Naming.lookup(urlServer + "/server");
 			gestor = (IGestor) Naming.lookup(urlServer + "/gestor");
 			myID = gestor.giffPlayer();
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "/player" + myID);
@@ -87,6 +91,29 @@ public class MainThread extends Thread {
 	public void run() {
 		try {
 			while(true){
+//				System.out.println(server.needMigrate());
+//				if(server.needMigrate().get(myID)) {
+//					System.out.println("need Migrate");
+//					server.needMigrate().set(myID, false);
+//					String anotherServerURL = server.getNeighbours().get(0);
+//					IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+//					anotherServer.migrateData(server);
+//					server = anotherServer;
+//					System.out.println(server.getServerURL());
+//					System.out.println(server.getNeighbours());
+//					gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
+//					myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
+//					for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
+//						allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
+//					}
+//					benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
+//					// TODO: notify other clients about the migration
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException ex) {
+//
+//					}
+//				}
 				tablero.repaint();
 				if(gestor.areAllTaken()) {
 					gestor.doNotifyAll();
@@ -99,6 +126,31 @@ public class MainThread extends Thread {
 				}
 			}
 			while (true) { // Main loop
+				System.out.println(server.needMigrate());
+				if(server.needMigrate().get(myID)) {
+					System.out.println("need Migrate");
+					ArrayList<Boolean> migrate = server.needMigrate();
+					migrate.set(myID, false);
+					server.setNeedMigrate(migrate);
+					String anotherServerURL = server.getNeighbours().get(0);
+					IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+					anotherServer.migrateData(server);
+					server = anotherServer;
+					System.out.println(server.getServerURL());
+					System.out.println(server.getNeighbours());
+					gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
+					myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
+					for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
+						allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
+					}
+					benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
+					// TODO: notify other clients about the migration
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException ex) {
+
+					}
+				}
 				//Check game state
 				//Check Pause
 				while(gestor.isPaused()){
@@ -162,8 +214,40 @@ public class MainThread extends Thread {
 					if (keys[KeyEvent.VK_LEFT]) {
 						myPlayer.moveLeft();
 					}
+<<<<<<< HEAD
 					if(keys[KeyEvent.VK_P]) {
 						gestor.pause();
+=======
+					//Initialize migration
+					if (keys[KeyEvent.VK_M]) {
+						ArrayList<Boolean> migrate = server.needMigrate();
+						// El resto debe migrar
+						for(int i = 0; i < migrate.size(); i++) {
+							if(i != myID) {
+								System.out.println(i + " = true");
+								migrate.set(i, true);
+							}
+						}
+						server.setNeedMigrate(migrate);
+						String anotherServerURL = server.getNeighbours().get(0);
+						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+						anotherServer.migrateData(server);
+						server = anotherServer;
+						System.out.println(server.getServerURL());
+						System.out.println(server.getNeighbours());
+						gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
+						myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
+						for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
+							allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
+						}
+						benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
+						// TODO: notify other clients about the migration
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException ex) {
+
+						}
+>>>>>>> server
 					}
 				}
 				//update players
@@ -217,7 +301,7 @@ public class MainThread extends Thread {
 				}
 			}
 		}
-		catch (RemoteException e){
+		catch (RemoteException | MalformedURLException | NotBoundException e){
 			e.printStackTrace();
 		}
 	}
