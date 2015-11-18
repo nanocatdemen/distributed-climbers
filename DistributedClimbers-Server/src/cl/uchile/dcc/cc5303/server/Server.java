@@ -1,6 +1,7 @@
 package cl.uchile.dcc.cc5303.server;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import cl.uchile.dcc.cc5303.*;
 
 import com.sun.management.OperatingSystemMXBean;
+
 import java.lang.management.ManagementFactory;
 
 public class Server extends UnicastRemoteObject implements IServer {
@@ -24,6 +26,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 	ArrayList<String> neighbours;
 	ArrayList<Boolean> needMigrate;
 	private OperatingSystemMXBean operatingSystemMXBean = (com.sun.management.OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+	double cpuLoad;
+	String migrateURL;
 
 
 	public Server(String urlServer) throws RemoteException {
@@ -33,6 +37,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.benchmanager = new HashMap<>();
 		this.neighbours = new ArrayList<>();
 		this.needMigrate = new ArrayList<>();
+		this.migrateURL = "";
 	}
 
 	@Override
@@ -143,7 +148,47 @@ public class Server extends UnicastRemoteObject implements IServer {
 
 	@Override
 	public boolean CPUover75(){
-		if(operatingSystemMXBean.getSystemCpuLoad() > 0.75) return true;
+		if(operatingSystemMXBean.getSystemLoadAverage() > 0.75) return true;
 		return false;		
+	}
+	
+	@Override
+	public double CPUload(){
+		return operatingSystemMXBean.getSystemLoadAverage();		
+	}
+
+	@Override
+	public void deletePlayer(int myID) throws RemoteException {
+		players.remove("player"+myID);
+	}
+
+	@Override
+	public String getServerMinLoad() throws RemoteException, MalformedURLException, NotBoundException {
+		ArrayList<IServer> servers = new ArrayList<>();
+		for(String server: neighbours){
+			servers.add((IServer)Naming.lookup(server+"server"));
+		}
+		double min = 1;
+		IServer minLoadServer = null;
+		for(IServer server: servers){
+			double load = server.CPUload();
+			System.out.println(load + " server " + server.getServerURL());
+			if(load<min){
+				min = load;
+				minLoadServer = server;
+			}
+		}
+		return minLoadServer.getServerURL();
+	}
+
+	@Override
+	public void setMigrateURL(String anotherServerURL) throws RemoteException {
+		this.migrateURL = anotherServerURL;
+		
+	}
+
+	@Override
+	public String getMigrateURL() throws RemoteException {
+		return this.migrateURL;
 	}
 }

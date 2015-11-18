@@ -39,16 +39,20 @@ public class ServerThread extends Thread {
 		HEIGHT = 600;
 		URLSERVER = "rmi://" + args[0] + "/iceClimbers/";
 		IServer server = new Server(URLSERVER);
+		URLSERVER = "rmi://" + args[0] + ":1099/iceClimbers/";
 		// means join, connects to the given server and gets how many players are published
 		// then publish the same amount of players.
 		if(args.length == 2) {
-			String externalUrl = "rmi://" + args[1] + "/iceClimbers/";
+			String externalUrl = "rmi://" + args[1] + ":1099/iceClimbers/";
 			// TODO: throw error when the server is not found
 			IServer refServer = (IServer) Naming.lookup(externalUrl + "server");
 			ArrayList<String> neighbours = refServer.getNeighbours();
+			System.out.println("External: " + externalUrl);
+			System.out.println("URLServer: " + URLSERVER);
 			for (String neighbour : neighbours) {
 				// TODO: throw error when the server is not found
-				IServer aServer = (IServer) Naming.lookup("rmi://" + neighbour + "/iceClimbers/server");
+				System.out.println(neighbour+"server");
+				IServer aServer = (IServer) Naming.lookup(neighbour + "server");
 				server.addNeighbour(aServer.getServerURL());
 				aServer.addNeighbour(URLSERVER);
 			}

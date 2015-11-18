@@ -45,5 +45,15 @@ public interface IServer extends Remote {
 	public void setNeedMigrate(ArrayList<Boolean> b) throws RemoteException;
 
 	public boolean CPUover75() throws RemoteException;
+	
+	public double CPUload() throws RemoteException;
+
+	public void deletePlayer(int myID) throws RemoteException;
+
+	public String getServerMinLoad() throws RemoteException, MalformedURLException, NotBoundException;
+
+	public void setMigrateURL(String anotherServerURL) throws RemoteException;
+	
+	public String getMigrateURL() throws RemoteException;
 
 }
