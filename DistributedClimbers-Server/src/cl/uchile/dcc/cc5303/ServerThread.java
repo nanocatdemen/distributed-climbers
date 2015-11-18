@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import cl.uchile.dcc.cc5303.server.IServer;
 import cl.uchile.dcc.cc5303.server.Server;
 
+
 public class ServerThread extends Thread {
 
 	public static String URLSERVER;
@@ -32,6 +33,7 @@ public class ServerThread extends Thread {
 			{275, 100, 9},
 			{350, 100, 10}
 	};
+	
 	public ServerThread(String[] args) throws RemoteException, MalformedURLException, NotBoundException {
 		WIDTH = 800;
 		HEIGHT = 600;

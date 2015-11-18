@@ -126,8 +126,8 @@ public class MainThread extends Thread {
 				}
 			}
 			while (true) { // Main loop
-				if(server.CPUover75()) System.out.println("hola!");
-				else System.out.println("chao!");
+				if(server.CPUover75()) System.out.println("CPU sobre 75%! =|");
+				else System.out.println("CPU bajo 75%! =)" );
 				System.out.println(server.needMigrate());
 				if(server.needMigrate().get(myID)) {
 					System.out.println("need Migrate");

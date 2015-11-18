@@ -44,4 +44,6 @@ public interface IServer extends Remote {
 	
 	public void setNeedMigrate(ArrayList<Boolean> b) throws RemoteException;
 
+	public boolean CPUover75() throws RemoteException;
+
 }
