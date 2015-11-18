@@ -92,6 +92,7 @@ public class MainThread extends Thread {
 		try {
 			while(true){
 				if(server.needMigrate().get(myID)) {
+					System.out.println("need Migrate");
 					server.needMigrate().set(myID, false);
 					String anotherServerURL = server.getNeighbours().get(0);
 					IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
