@@ -56,4 +56,10 @@ public interface IServer extends Remote {
 	
 	public String getMigrateURL() throws RemoteException;
 
+	public void setActive(boolean b) throws RemoteException;
+
+	public boolean getActive() throws RemoteException;
+
+	public String getActiveServer() throws RemoteException, MalformedURLException, NotBoundException;
+
 }

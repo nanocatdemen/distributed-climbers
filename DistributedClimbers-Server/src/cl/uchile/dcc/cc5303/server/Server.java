@@ -28,6 +28,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 	private OperatingSystemMXBean operatingSystemMXBean = (com.sun.management.OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
 	double cpuLoad;
 	String migrateURL;
+	boolean isActive;
 
 
 	public Server(String urlServer) throws RemoteException {
@@ -168,17 +169,17 @@ public class Server extends UnicastRemoteObject implements IServer {
 		for(String server: neighbours){
 			servers.add((IServer)Naming.lookup(server+"server"));
 		}
-		double min = 1;
-		IServer minLoadServer = null;
+		double min = Double.MAX_VALUE;
+		String minLoadServer = "";
 		for(IServer server: servers){
 			double load = server.CPUload();
 			System.out.println(load + " server " + server.getServerURL());
 			if(load<min){
 				min = load;
-				minLoadServer = server;
+				minLoadServer = server.getServerURL();
 			}
 		}
-		return minLoadServer.getServerURL();
+		return minLoadServer;
 	}
 
 	@Override
@@ -190,5 +191,31 @@ public class Server extends UnicastRemoteObject implements IServer {
 	@Override
 	public String getMigrateURL() throws RemoteException {
 		return this.migrateURL;
+	}
+
+	@Override
+	public void setActive(boolean b) throws RemoteException {
+		this.isActive = b;
+		
+	}
+
+	@Override
+	public boolean getActive() throws RemoteException {
+		return this.isActive;
+	}
+
+	@Override
+	public String getActiveServer() throws RemoteException, MalformedURLException, NotBoundException {
+		ArrayList<IServer> servers = new ArrayList<>();
+		for(String server: neighbours){
+			servers.add((IServer)Naming.lookup(server+"server"));
+		}
+		servers.add(this);
+		for(IServer server: servers){
+			if(server.getActive()){
+				return server.getServerURL();
+			}
+		}
+		return "";
 	}
 }

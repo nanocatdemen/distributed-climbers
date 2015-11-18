@@ -14,6 +14,7 @@ public class ServerThread extends Thread {
 
 	public static String URLSERVER;
 	public static int NB_OF_PLAYERS, NB_OF_LIVES, WIDTH, HEIGHT;
+	public IServer server;
 	private static int[][] benches  = {
 			//TODO ver como generar estas cosas de manera más aleatoria y bonita
 			{0, 410, 0},
@@ -78,6 +79,7 @@ public class ServerThread extends Thread {
 			// migrate data
 			server.migrateData(refServer);
 			server.serve();
+			server.setActive(false);
 			//System.out.println(((IPlayer) server.getObjects().get(0)).getLives());
 		} // means create 
 		else {
@@ -96,14 +98,50 @@ public class ServerThread extends Thread {
 			server.addBenchManager(manager, "benchManager");
 			server.addGestor(gestor, "gestor");
 			server.serve();
-		}
+			server.setActive(true);
+			}
+		this.server = server;
 		server.publish();
 	}
 	
 	@Override
 	public void run() {
 		while(true) {
-			
+			try {
+				if(server.CPUover75() && server.getActive()) {
+					System.out.println("-------------------------------------Intento de migrar-----------------------------------");
+					String anotherServerURL = server.getServerMinLoad();
+					if(anotherServerURL != ""){
+						server.setActive(false);
+						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+						anotherServer.migrateData(server);
+						server.setMigrateURL(anotherServerURL);
+						System.out.println(server.getMigrateURL());
+						ArrayList<Boolean> migrate = server.needMigrate();
+						for(int i = 0; i < migrate.size(); i++) {
+								migrate.set(i, true);
+						}
+						server.setNeedMigrate(migrate);
+						server = anotherServer;
+						anotherServer.setActive(true);
+					}
+					else
+						System.err.println("NO SE ENCONTRARON SERVIDORES PARA MIGRAR");
+				}
+				Thread.sleep(1000);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
