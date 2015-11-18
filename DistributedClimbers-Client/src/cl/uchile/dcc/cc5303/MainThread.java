@@ -249,6 +249,9 @@ public class MainThread extends Thread {
 
 						}
 					}
+					if(keys[KeyEvent.VK_Q]) {
+						System.exit(1);
+					}
 				}
 				//update players
 				myPlayer.update(DX);
