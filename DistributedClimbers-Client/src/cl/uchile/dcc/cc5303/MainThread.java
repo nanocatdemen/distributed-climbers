@@ -91,6 +91,7 @@ public class MainThread extends Thread {
 	public void run() {
 		try {
 			while(true){
+				System.out.println(server.needMigrate());
 				if(server.needMigrate().get(myID)) {
 					System.out.println("need Migrate");
 					server.needMigrate().set(myID, false);
