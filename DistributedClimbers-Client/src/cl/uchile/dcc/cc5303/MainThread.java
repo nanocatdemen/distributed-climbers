@@ -210,6 +210,7 @@ public class MainThread extends Thread {
 								migrate.set(i, true);
 							}
 						}
+						server.setNeedMigrate(migrate);
 						String anotherServerURL = server.getNeighbours().get(0);
 						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
 						anotherServer.migrateData(server);
