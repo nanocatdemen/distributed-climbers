@@ -214,10 +214,9 @@ public class MainThread extends Thread {
 					if (keys[KeyEvent.VK_LEFT]) {
 						myPlayer.moveLeft();
 					}
-<<<<<<< HEAD
 					if(keys[KeyEvent.VK_P]) {
 						gestor.pause();
-=======
+					}
 					//Initialize migration
 					if (keys[KeyEvent.VK_M]) {
 						ArrayList<Boolean> migrate = server.needMigrate();
@@ -247,7 +246,6 @@ public class MainThread extends Thread {
 						} catch (InterruptedException ex) {
 
 						}
->>>>>>> server
 					}
 				}
 				//update players
