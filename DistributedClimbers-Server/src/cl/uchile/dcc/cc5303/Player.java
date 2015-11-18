@@ -13,14 +13,17 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	boolean waiting = true;
 	int startPosX, startPosY, startLives;
 	boolean alive = true;
+	int score = 0;
+	int id;
 
-	public Player(int x, int y, int lives) throws RemoteException {
+	public Player(int x, int y, int lives, int id) throws RemoteException {
 		this.posX = x;
 		this.posY = y;
 		this.startPosX = x;
 		this.startPosY = y;
 		this.lives = lives;
 		this.startLives = lives;
+		this.id = id;
 	}
 
 	@Override
@@ -194,6 +197,7 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 		this.posY = this.startPosY;
 		this.lives = this.startLives;
 		this.alive = true;
+		this.score = 0;
 	}
 	
 	@Override
@@ -209,5 +213,35 @@ public class Player extends UnicastRemoteObject implements IPlayer {
 	@Override
 	public void setAlive(boolean b){
 		this.alive = b;
+	}
+	
+	@Override
+	public int getScore() {
+		return score;
+	}
+
+	@Override
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	@Override
+	public int getStartLives() {
+		return startLives;
+	}
+
+	@Override
+	public void setStartLives(int startLives) {
+		this.startLives = startLives;
+	}
+	
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
 	}
 }

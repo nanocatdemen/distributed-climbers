@@ -78,4 +78,16 @@ public interface IPlayer extends Remote {
 	
 	public void setAlive(boolean b) throws RemoteException;
 
+	int getScore() throws RemoteException;
+
+	void setScore(int score) throws RemoteException;
+
+	int getStartLives() throws RemoteException;
+
+	void setStartLives(int startLives) throws RemoteException;
+
+	int getId() throws RemoteException;
+
+	void setId(int id) throws RemoteException;
+
 }

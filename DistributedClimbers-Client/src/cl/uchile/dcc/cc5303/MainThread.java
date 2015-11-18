@@ -48,11 +48,12 @@ public class MainThread extends Thread {
 			server = (IServer) Naming.lookup(urlServer + "server");
 			String activeServer= server.getActiveServer();
 			urlServer = activeServer;
-			System.out.println(activeServer);
 			server = (IServer) Naming.lookup(urlServer + "server");
 			gestor = (IGestor) Naming.lookup(urlServer + "gestor");
 			myID = gestor.giffPlayer();
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "player" + myID);
+			if(!myPlayer.isAlive())
+				myPlayer.reset();
 			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
 				allPlayers.add((IPlayer) Naming.lookup(urlServer + "player" + i));
 			}
@@ -91,10 +92,39 @@ public class MainThread extends Thread {
 
 	}
 
+	public void clientMigrate() throws RemoteException, MalformedURLException, NotBoundException{
+		if(server.needMigrate().get(myID)) {
+			//System.out.println("need Migrate");
+			ArrayList<Boolean> migrate = server.needMigrate();
+			migrate.set(myID, false);
+			server.setNeedMigrate(migrate);
+			String anotherServerURL = server.getMigrateURL();
+			System.out.println("Server to migrate " + anotherServerURL);
+			IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+			anotherServer.migrateData(server);
+			server = anotherServer;
+			gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
+			myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
+			for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
+				allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
+			}
+			benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException ex) {
+
+			}
+		}
+	}
+
 	@Override
 	public void run() {
 		try {
 			while(true){
+				System.out.println();
+				if(server.needMigrate().get(myID)) {
+					clientMigrate();
+				}
 				tablero.repaint();
 				if(gestor.areAllTaken()) {
 					gestor.doNotifyAll();
@@ -108,26 +138,7 @@ public class MainThread extends Thread {
 			}
 			while (true) { // Main loop
 				if(server.needMigrate().get(myID)) {
-					//System.out.println("need Migrate");
-					ArrayList<Boolean> migrate = server.needMigrate();
-					migrate.set(myID, false);
-					server.setNeedMigrate(migrate);
-					String anotherServerURL = server.getMigrateURL();
-					System.out.println("Server to migrate " + anotherServerURL);
-					IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
-					anotherServer.migrateData(server);
-					server = anotherServer;
-					gestor = (IGestor) Naming.lookup(anotherServerURL + "gestor");
-					myPlayer = (IPlayer) Naming.lookup(anotherServerURL + "player" + myID);
-					for(int i = 0; i < gestor.getNbOfPlayers(); i++) {
-						allPlayers.set(i, (IPlayer) Naming.lookup(anotherServerURL + "player" + i));
-					}
-					benchManager = (IBenchManager) Naming.lookup(anotherServerURL + "benchManager");
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException ex) {
-
-					}
+					clientMigrate();
 				}
 				//Check game state
 				//Check Pause
@@ -140,10 +151,7 @@ public class MainThread extends Thread {
 				}
 				//Check Game Over
 				tablero.isGameOver = false;
-				if(gestor.gameOver(allPlayers)) {
-					for(int i = 0; i<gestor.getNbOfPlayers(); i++){
-						tablero.results[i] = gestor.getResults()[i];
-					}
+				while(gestor.gameOver(allPlayers)) {
 					tablero.isGameOver = true;
 					// Revancha?
 					if (keys[KeyEvent.VK_ENTER]) {
@@ -179,34 +187,50 @@ public class MainThread extends Thread {
 					}
 				}
 
-				
-				
+
+
 				// Check controls
-				else {
-					if (keys[KeyEvent.VK_UP]) {
-						myPlayer.jump();
-					}
-					if (keys[KeyEvent.VK_RIGHT]) {
-						myPlayer.moveRight();
-					}
-					if (keys[KeyEvent.VK_LEFT]) {
-						myPlayer.moveLeft();
-					}
-					if(keys[KeyEvent.VK_P]) {
-						gestor.pause();
-					}
-					//Initialize migration
-//					if (keys[KeyEvent.VK_M]) {
-//						try {
-//							Thread.sleep(1000);
-//						} catch (InterruptedException ex) {
-//
-//						}
-//					}
-					if(keys[KeyEvent.VK_Q]) {
-						server.deletePlayer(myID);
-						System.exit(1);
-					}
+				if (keys[KeyEvent.VK_UP]) {
+					myPlayer.jump();
+				}
+				if (keys[KeyEvent.VK_RIGHT]) {
+					myPlayer.moveRight();
+				}
+				if (keys[KeyEvent.VK_LEFT]) {
+					myPlayer.moveLeft();
+				}
+				if(keys[KeyEvent.VK_P]) {
+					gestor.pause();
+				}
+				//Initialize migration
+				//					if (keys[KeyEvent.VK_M]) {
+				//						try {
+				//							Thread.sleep(1000);
+				//						} catch (InterruptedException ex) {
+				//
+				//						}
+				//					}
+				if(keys[KeyEvent.VK_Q]) {
+					server.deletePlayer(myID);
+					//						String anotherServerURL = server.getServerMinLoad();
+					//						if(anotherServerURL != ""){
+					//							server.setActive(false);
+					//							IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+					//							anotherServer.migrateData(server);
+					//							server.setMigrateURL(anotherServerURL);
+					//							System.out.println(server.getMigrateURL());
+					//							ArrayList<Boolean> migrate = server.needMigrate();
+					//							for(int i = 0; i < migrate.size(); i++) {
+					//									migrate.set(i, true);
+					//							}
+					//							server.getGestor("gestor").doNotifyAll();
+					//							server.setNeedMigrate(migrate);
+					//							server = anotherServer;
+					//							anotherServer.setActive(true);
+					//						}
+					//						else
+					//							System.err.println("NO SE ENCONTRARON SERVIDORES PARA MIGRAR");
+					System.exit(1);
 				}
 				//update players
 				myPlayer.update(DX);
@@ -233,7 +257,6 @@ public class MainThread extends Thread {
 					}
 					else{
 						myPlayer.die();
-						gestor.feed(myID);
 					}
 				}
 
@@ -252,6 +275,8 @@ public class MainThread extends Thread {
 				}
 
 				tablero.repaint();
+				if(myPlayer.isAlive())
+					myPlayer.setScore(myPlayer.getScore()+1);
 				try {
 					Thread.sleep(200 / UPDATE_RATE);
 				} catch (InterruptedException ex) {

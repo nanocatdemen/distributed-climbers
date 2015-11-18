@@ -29,6 +29,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 	double cpuLoad;
 	String migrateURL;
 	boolean isActive;
+	boolean expectingPlayers;
 
 
 	public Server(String urlServer) throws RemoteException {
@@ -39,6 +40,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.neighbours = new ArrayList<>();
 		this.needMigrate = new ArrayList<>();
 		this.migrateURL = "";
+		this.expectingPlayers = false;
 	}
 
 	@Override
@@ -94,7 +96,20 @@ public class Server extends UnicastRemoteObject implements IServer {
 			this.players.get(path).setAlive(remotePlayer.isAlive());
 			this.players.get(path).setPosX(remotePlayer.getPosX());
 			this.players.get(path).setPosY(remotePlayer.getPosY());
+			this.players.get(path).setScore(remotePlayer.getScore());
+			this.players.get(path).setStartLives(remotePlayer.getStartLives());
+			this.players.get(path).setId(remotePlayer.getId());
 		}
+		IGestor gestor = this.gestor.get("gestor");
+		IGestor remoteGestor = sourceServer.getGestor("gestor");
+		gestor.setDead(remoteGestor.getDead());
+		gestor.setDedGaem(remoteGestor.isDedGaem());
+		gestor.setLock(remoteGestor.getLock());
+		gestor.setPause(remoteGestor.isPause());
+		gestor.setRevanchaWanters(remoteGestor.getRevanchaWanters());
+		gestor.setScore(remoteGestor.getScore());
+		gestor.setTaken(remoteGestor.getTaken());
+		gestor.setDisconected(remoteGestor.getDisconected());
 	}
 
 	@Override
@@ -159,8 +174,12 @@ public class Server extends UnicastRemoteObject implements IServer {
 	}
 
 	@Override
-	public void deletePlayer(int myID) throws RemoteException {
-		players.remove("player"+myID);
+	public void deletePlayer(int quiterID) throws RemoteException, MalformedURLException, NotBoundException {
+		this.gestor.get("gestor").deletePlayer(quiterID);
+		this.expectingPlayers = true;
+		IPlayer quiter = (IPlayer)Naming.lookup(urlServer + "player" + quiterID);
+		quiter.setLives(-1);
+		quiter.die();
 	}
 
 	@Override

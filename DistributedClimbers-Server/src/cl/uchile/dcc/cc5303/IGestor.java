@@ -30,8 +30,6 @@ public interface IGestor extends Remote {
 	
 	void weLost(int i) throws RemoteException;
 
-	void feed(int myID) throws RemoteException;
-
 	void resetScore() throws RemoteException;
 
 	int[] getResults() throws RemoteException;
@@ -43,5 +41,39 @@ public interface IGestor extends Remote {
 	void resume() throws RemoteException;
 	
 	boolean isPaused() throws RemoteException;
+
+	void setPause(boolean pause) throws RemoteException;
+
+	boolean isPause() throws RemoteException;
+
+	void setDead(int dead) throws RemoteException;
+
+	int getDead() throws RemoteException;
+
+	void setScore(int[] score) throws RemoteException;
+
+	int[] getScore() throws RemoteException;
+
+	void setLock(Mutex lock) throws RemoteException;
+
+	Mutex getLock() throws RemoteException;
+
+	void setDedGaem(boolean dedGaem) throws RemoteException;
+
+	boolean isDedGaem() throws RemoteException;
+
+	void setRevanchaWanters(ArrayList<Boolean> revanchaWanters) throws RemoteException;
+
+	ArrayList<Boolean> getRevanchaWanters() throws RemoteException;
+
+	void setTaken(ArrayList<Boolean> taken) throws RemoteException;
+
+	ArrayList<Boolean> getTaken() throws RemoteException;
+
+	void deletePlayer(int myID) throws RemoteException;
+
+	ArrayList<Integer> getDisconected() throws RemoteException;
+
+	void setDisconected(ArrayList<Integer> disconected) throws RemoteException;
 	
 }

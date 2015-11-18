@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Board extends Canvas {
 
@@ -14,18 +15,16 @@ public class Board extends Canvas {
 
 	public int width, height;
 
-	public ArrayList<IPlayer> players;
+	public static ArrayList<IPlayer> players;
 	public ArrayList<IBench> bases;
 	public Image img;
 	public Graphics buffer;
 	public boolean isGameOver;
-	public int[] results;
 	int nbp;
 
 	public Board(int w, int h, int nbOfPlayers){
 		this.width = w;
 		this.height = h;
-		results = new int[nbOfPlayers];
 		isGameOver = false;
 		nbp = nbOfPlayers;
 		bases = new ArrayList<IBench>();
@@ -70,7 +69,11 @@ public class Board extends Canvas {
 
 		if (isGameOver) { 
 			Board.drawGameOver(buffer, this.width/2-150,this.height/2);
-			Board.drawResults(buffer, results, nbp, 550, 400);
+			try {
+				Board.drawResults(buffer, nbp, 550, 400);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 
 		g.drawImage(img, 0, 0, null);
@@ -98,15 +101,17 @@ public class Board extends Canvas {
 	}
 
 	static void drawPlayer(Graphics buffer, IPlayer p, Color color, String name) throws RemoteException {
-		buffer.setColor(color);
-		buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
-		buffer.setFont(new Font("ComicSans", Font.PLAIN, 10));
-		buffer.setColor(Color.white);
-		buffer.drawString(name + " - " + p.getLives()+"", p.getPosX() - 5, p.getPosY() - 3);
-		if(p.isWaiting()) {
-			buffer.setFont(new Font("ComicSans", Font.PLAIN, 20));
+		if(p.isAlive()){
+			buffer.setColor(color);
+			buffer.fillRect(p.getPosX(), p.getPosY(), p.getW(), p.getH());
+			buffer.setFont(new Font("ComicSans", Font.PLAIN, 10));
 			buffer.setColor(Color.white);
-			buffer.drawString("Waiting", p.getPosX() - 35, p.getPosY() - 13);
+			buffer.drawString(name + " - " + p.getLives() + " - " + p.getScore(), p.getPosX() - 5, p.getPosY() - 3);
+			if(p.isWaiting()) {
+				buffer.setFont(new Font("ComicSans", Font.PLAIN, 20));
+				buffer.setColor(Color.white);
+				buffer.drawString("Waiting", p.getPosX() - 35, p.getPosY() - 13);
+			}
 		}
 	}
 
@@ -121,16 +126,24 @@ public class Board extends Canvas {
 		buffer.drawString("Esc = Salir" , x, y+90);
 	}
 	
-	static void drawResults(Graphics buffer, int[] results, int nbp, int x, int y){
+	static void drawResults(Graphics buffer, int nbp, int x, int y) throws RemoteException{
 		buffer.setFont(new Font("ComicSans", Font.PLAIN, 30));
 		int disp = 96;
+		ArrayList<Playerscore> asd = new ArrayList<Playerscore>();
+		for(IPlayer player:players){
+			asd.add(new Playerscore(player, player.getScore()));
+		}
+		Collections.sort(asd);
+		for(Playerscore asdf: asd){
+			System.out.println("" + asdf.score + " id " + asdf.player.getId());
+		}
 		String player = "";
 		for(int i = 0; i<nbp; i++){
-			if(results[i]==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}
-			if(results[i]==1){ buffer.setColor(Color.pink); player = "nana";}
-			if(results[i]==2){ buffer.setColor(new Color(80,230,80)); player = "meme";}
-			if(results[i]==3){ buffer.setColor(new Color(200,200,80)); player = "lili";}
-			buffer.drawString((nbp-i)+"º: "+player, x, y+disp);
+			if(asd.get(nbp-i-1).player.getId()==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}
+			if(asd.get(nbp-i-1).player.getId()==1){ buffer.setColor(Color.pink); player = "nana";}
+			if(asd.get(nbp-i-1).player.getId()==2){ buffer.setColor(new Color(80,230,80)); player = "meme";}
+			if(asd.get(nbp-i-1).player.getId()==3){ buffer.setColor(new Color(200,200,80)); player = "lili";}
+			buffer.drawString((nbp-i)+"º: "+player + " Score: " + asd.get(nbp-i-1).score , x-100, y+disp);
 			disp -= 32;
 		}
 	}

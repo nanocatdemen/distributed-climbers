@@ -8,6 +8,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 
 	private static final long serialVersionUID = 1L;
 	ArrayList<Boolean> taken;
+	ArrayList<Integer> disconected;
 	ArrayList<Boolean> revanchaWanters;
 	boolean dedGaem = false;
 	protected Mutex lock;
@@ -21,6 +22,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	public Gestor(int players, int benches) throws RemoteException {
 		taken = new ArrayList<Boolean>();
 		revanchaWanters = new ArrayList<Boolean>();
+		disconected = new ArrayList<>();
 		for(int i = 0; i < players; i++) {
 			taken.add(false);
 			revanchaWanters.add(false);
@@ -33,6 +35,8 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 
 	@Override
 	public int giffPlayer() { //KOTL GIFF me MANA
+		if(this.disconected.size()>0)
+			return this.disconected.remove(0);
 		for(int i = 0; i < taken.size(); i++) {
 			if(!taken.get(i)) {
 				taken.set(i, true);
@@ -127,12 +131,6 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	public void weLost(int i) throws RemoteException { //gg la climbers
 		this.dedGaem = true;
 	}
-
-	@Override
-	public void feed(int deadPlayer) {
-		score[dead]= deadPlayer;
-		dead++;
-	}
 	
 	@Override
 	public void resetScore(){
@@ -178,6 +176,91 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	@Override
 	public boolean isPaused() throws RemoteException {
 		return pause;
+	}
+
+	@Override
+	public ArrayList<Boolean> getTaken() {
+		return taken;
+	}
+
+	@Override
+	public void setTaken(ArrayList<Boolean> taken) {
+		this.taken = taken;
+	}
+
+	@Override
+	public ArrayList<Boolean> getRevanchaWanters() {
+		return revanchaWanters;
+	}
+
+	@Override
+	public void setRevanchaWanters(ArrayList<Boolean> revanchaWanters) {
+		this.revanchaWanters = revanchaWanters;
+	}
+
+	@Override
+	public boolean isDedGaem() {
+		return dedGaem;
+	}
+
+	@Override
+	public void setDedGaem(boolean dedGaem) {
+		this.dedGaem = dedGaem;
+	}
+
+	@Override
+	public Mutex getLock() {
+		return lock;
+	}
+
+	@Override
+	public void setLock(Mutex lock) {
+		this.lock = lock;
+	}
+
+	@Override
+	public int[] getScore() {
+		return score;
+	}
+
+	@Override
+	public void setScore(int[] score) {
+		this.score = score;
+	}
+
+	@Override
+	public int getDead() {
+		return dead;
+	}
+
+	@Override
+	public void setDead(int dead) {
+		this.dead = dead;
+	}
+
+	@Override
+	public boolean isPause() {
+		return pause;
+	}
+
+	@Override
+	public void setPause(boolean pause) {
+		this.pause = pause;
+	}
+
+	@Override
+	public void deletePlayer(int quiterID) throws RemoteException {
+		disconected.add(quiterID);
+	}
+	
+	@Override
+	public ArrayList<Integer> getDisconected() {
+		return disconected;
+	}
+
+	@Override
+	public void setDisconected(ArrayList<Integer> disconected) {
+		this.disconected = disconected;
 	}
 
 }

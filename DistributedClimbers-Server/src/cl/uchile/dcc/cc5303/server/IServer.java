@@ -48,7 +48,7 @@ public interface IServer extends Remote {
 	
 	public double CPUload() throws RemoteException;
 
-	public void deletePlayer(int myID) throws RemoteException;
+	public void deletePlayer(int myID) throws RemoteException, MalformedURLException, NotBoundException;
 
 	public String getServerMinLoad() throws RemoteException, MalformedURLException, NotBoundException;
 

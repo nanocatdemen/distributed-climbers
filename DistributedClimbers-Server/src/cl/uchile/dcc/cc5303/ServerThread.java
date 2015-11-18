@@ -71,7 +71,7 @@ public class ServerThread extends Thread {
 			IGestor gestor = new Gestor(nPlayers, benches.length);
 
 			for(int i = 0; i < nPlayers; i++) {
-				server.addPlayer(new Player(100 + WIDTH/4*(i), HEIGHT - 50, 1), "player" + i);
+				server.addPlayer(new Player(100 + WIDTH/4*(i), HEIGHT - 50, 1, i), "player" + i);
 			}
 			server.addBenchManager(manager, "benchManager");
 			server.addGestor(gestor, "gestor");
@@ -93,7 +93,7 @@ public class ServerThread extends Thread {
 			IGestor gestor = new Gestor(NB_OF_PLAYERS, benches.length);
 			
 			for(int i = 0; i < NB_OF_PLAYERS; i++) {
-				server.addPlayer(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES), "player" + i);
+				server.addPlayer(new Player(100 + WIDTH/4*(i), HEIGHT - 50, NB_OF_LIVES, i), "player" + i);
 			}
 			server.addBenchManager(manager, "benchManager");
 			server.addGestor(gestor, "gestor");
@@ -121,6 +121,7 @@ public class ServerThread extends Thread {
 						for(int i = 0; i < migrate.size(); i++) {
 								migrate.set(i, true);
 						}
+						server.getGestor("gestor").doNotifyAll();
 						server.setNeedMigrate(migrate);
 						server = anotherServer;
 						anotherServer.setActive(true);
