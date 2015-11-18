@@ -8,6 +8,9 @@ import java.util.HashMap;
 
 import cl.uchile.dcc.cc5303.*;
 
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+
 public class Server extends UnicastRemoteObject implements IServer {
 
 	/**
@@ -20,6 +23,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 	HashMap<String,IBenchManager> benchmanager;
 	ArrayList<String> neighbours;
 	ArrayList<Boolean> needMigrate;
+	private OperatingSystemMXBean operatingSystemMXBean = (com.sun.management.OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+
 
 	public Server(String urlServer) throws RemoteException {
 		this.urlServer = urlServer;
@@ -136,4 +141,9 @@ public class Server extends UnicastRemoteObject implements IServer {
 		this.needMigrate = b;
 	}
 
+	@Override
+	public boolean CPUover75(){
+		if(operatingSystemMXBean.getSystemCpuLoad() > 0.75) return true;
+		return false;		
+	}
 }
