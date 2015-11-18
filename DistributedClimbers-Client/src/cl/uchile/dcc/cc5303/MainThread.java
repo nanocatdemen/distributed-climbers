@@ -202,14 +202,13 @@ public class MainThread extends Thread {
 					}
 					//Initialize migration
 					if (keys[KeyEvent.VK_M]) {
-						int j = 0;
 						ArrayList<Boolean> migrate = server.needMigrate();
 						// El resto debe migrar
-						for(boolean b : migrate) {
-							if(j != myID) {
-								migrate.set(j, true);
+						for(int i = 0; i < migrate.size(); i++) {
+							if(i != myID) {
+								System.out.println(i + " = true");
+								migrate.set(i, true);
 							}
-							j++;
 						}
 						String anotherServerURL = server.getNeighbours().get(0);
 						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
