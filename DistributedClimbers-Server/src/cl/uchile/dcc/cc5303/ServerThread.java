@@ -109,25 +109,7 @@ public class ServerThread extends Thread {
 		while(true) {
 			try {
 				if(server.CPUover75() && server.getActive()) {
-					System.out.println("-------------------------------------Intento de migrar-----------------------------------");
-					String anotherServerURL = server.getServerMinLoad();
-					if(anotherServerURL != ""){
-						server.setActive(false);
-						IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
-						anotherServer.migrateData(server);
-						server.setMigrateURL(anotherServerURL);
-						System.out.println(server.getMigrateURL());
-						ArrayList<Boolean> migrate = server.needMigrate();
-						for(int i = 0; i < migrate.size(); i++) {
-								migrate.set(i, true);
-						}
-						server.getGestor("gestor").doNotifyAll();
-						server.setNeedMigrate(migrate);
-						server = anotherServer;
-						anotherServer.setActive(true);
-					}
-					else
-						System.err.println("NO SE ENCONTRARON SERVIDORES PARA MIGRAR");
+					server = server.migrate("SOBRECARGA");
 				}
 				Thread.sleep(1000);
 			} catch (RemoteException e) {

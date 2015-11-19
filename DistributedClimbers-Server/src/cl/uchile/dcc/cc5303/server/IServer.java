@@ -10,27 +10,27 @@ import cl.uchile.dcc.cc5303.*;
 
 public interface IServer extends Remote {
 
-	void serve() throws RemoteException, MalformedURLException;
+	public void serve() throws RemoteException, MalformedURLException;
 	
-	void addPlayer(IPlayer p, String path) throws RemoteException;
+	public void addPlayer(IPlayer p, String path) throws RemoteException;
 	
-	void addGestor(IGestor g, String path) throws RemoteException;
+	public void addGestor(IGestor g, String path) throws RemoteException;
 	
-	void addBenchManager(IBenchManager b, String path) throws RemoteException;
+	public void addBenchManager(IBenchManager b, String path) throws RemoteException;
 	
-	IPlayer getPlayer(String path) throws RemoteException;
+	public IPlayer getPlayer(String path) throws RemoteException;
 	
-	IGestor getGestor(String path) throws RemoteException;
+	public IGestor getGestor(String path) throws RemoteException;
 	
-	IBenchManager getBenchManager(String path) throws RemoteException;
+	public IBenchManager getBenchManager(String path) throws RemoteException;
 
-	void addNeighbour(String url) throws RemoteException;
+	public void addNeighbour(String url) throws RemoteException;
 
-	void publish() throws RemoteException, MalformedURLException;
+	public void publish() throws RemoteException, MalformedURLException;
 
-	ArrayList<String> getNeighbours() throws RemoteException;
+	public ArrayList<String> getNeighbours() throws RemoteException;
 
-	String getServerURL() throws RemoteException;
+	public String getServerURL() throws RemoteException;
 	
 	public void setServerURL(String url) throws RemoteException;
 	
@@ -61,5 +61,7 @@ public interface IServer extends Remote {
 	public boolean getActive() throws RemoteException;
 
 	public String getActiveServer() throws RemoteException, MalformedURLException, NotBoundException;
+
+	public IServer migrate(String string)throws RemoteException, MalformedURLException, NotBoundException;
 
 }

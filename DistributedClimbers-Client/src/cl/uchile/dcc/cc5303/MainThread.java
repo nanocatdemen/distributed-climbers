@@ -94,12 +94,10 @@ public class MainThread extends Thread {
 
 	public void clientMigrate() throws RemoteException, MalformedURLException, NotBoundException{
 		if(server.needMigrate().get(myID)) {
-			//System.out.println("need Migrate");
 			ArrayList<Boolean> migrate = server.needMigrate();
 			migrate.set(myID, false);
 			server.setNeedMigrate(migrate);
 			String anotherServerURL = server.getMigrateURL();
-			System.out.println("Server to migrate " + anotherServerURL);
 			IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
 			anotherServer.migrateData(server);
 			server = anotherServer;
@@ -202,34 +200,9 @@ public class MainThread extends Thread {
 				if(keys[KeyEvent.VK_P]) {
 					gestor.pause();
 				}
-				//Initialize migration
-				//					if (keys[KeyEvent.VK_M]) {
-				//						try {
-				//							Thread.sleep(1000);
-				//						} catch (InterruptedException ex) {
-				//
-				//						}
-				//					}
 				if(keys[KeyEvent.VK_Q]) {
 					server.deletePlayer(myID);
-					//						String anotherServerURL = server.getServerMinLoad();
-					//						if(anotherServerURL != ""){
-					//							server.setActive(false);
-					//							IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
-					//							anotherServer.migrateData(server);
-					//							server.setMigrateURL(anotherServerURL);
-					//							System.out.println(server.getMigrateURL());
-					//							ArrayList<Boolean> migrate = server.needMigrate();
-					//							for(int i = 0; i < migrate.size(); i++) {
-					//									migrate.set(i, true);
-					//							}
-					//							server.getGestor("gestor").doNotifyAll();
-					//							server.setNeedMigrate(migrate);
-					//							server = anotherServer;
-					//							anotherServer.setActive(true);
-					//						}
-					//						else
-					//							System.err.println("NO SE ENCONTRARON SERVIDORES PARA MIGRAR");
+					server = server.migrate("JUGADOR QUITER");
 					System.exit(1);
 				}
 				//update players

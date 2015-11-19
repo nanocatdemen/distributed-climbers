@@ -134,9 +134,6 @@ public class Board extends Canvas {
 			asd.add(new Playerscore(player, player.getScore()));
 		}
 		Collections.sort(asd);
-		for(Playerscore asdf: asd){
-			System.out.println("" + asdf.score + " id " + asdf.player.getId());
-		}
 		String player = "";
 		for(int i = 0; i<nbp; i++){
 			if(asd.get(nbp-i-1).player.getId()==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}

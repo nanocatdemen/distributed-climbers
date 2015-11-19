@@ -192,7 +192,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 		String minLoadServer = "";
 		for(IServer server: servers){
 			double load = server.CPUload();
-			System.out.println(load + " server " + server.getServerURL());
 			if(load<min){
 				min = load;
 				minLoadServer = server.getServerURL();
@@ -236,5 +235,28 @@ public class Server extends UnicastRemoteObject implements IServer {
 			}
 		}
 		return "";
+	}
+
+	@Override
+	public IServer migrate(String motive) throws RemoteException, MalformedURLException, NotBoundException {
+		String anotherServerURL = this.getServerMinLoad();
+		if(anotherServerURL != ""){
+			System.out.println("\n\n-----------MIGRANDO POR " + motive + "------------\n\n");
+			this.setActive(false);
+			IServer anotherServer = (IServer) Naming.lookup(anotherServerURL + "server");
+			anotherServer.migrateData(this);
+			this.setMigrateURL(anotherServerURL);
+			ArrayList<Boolean> migrate = this.needMigrate();
+			for(int i = 0; i < migrate.size(); i++) {
+				migrate.set(i, true);
+			}
+			this.getGestor("gestor").doNotifyAll();
+			this.setNeedMigrate(migrate);
+			anotherServer.setActive(true);
+			return anotherServer;
+		}
+		else
+			System.err.println("NO SE ENCONTRARON SERVIDORES PARA MIGRAR");
+		return this;
 	}
 }
