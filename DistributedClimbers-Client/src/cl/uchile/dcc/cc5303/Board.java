@@ -20,6 +20,8 @@ public class Board extends Canvas {
 	public Image img;
 	public Graphics buffer;
 	public boolean isGameOver;
+	static Color[] colors = {new Color(80,100,255), Color.pink, new Color(80,230,80), new Color(200,200,80)};
+	static String[] names = {"popo", "nana", "meme", "lili"};
 	int nbp;
 
 	public Board(int w, int h, int nbOfPlayers){
@@ -39,9 +41,6 @@ public class Board extends Canvas {
 			img = createImage(getWidth(),getHeight());
 			buffer = img.getGraphics();
 		}
-		
-		Color[] colors = {new Color(80,100,255), Color.pink, new Color(80,230,80), new Color(200,200,80)};
-		String[] names = {"popo", "nana", "meme", "lili"};
 
 		buffer.setColor(Color.black);
 		buffer.fillRect(0, 0, getWidth(), getHeight());
@@ -70,7 +69,7 @@ public class Board extends Canvas {
 		if (isGameOver) { 
 			Board.drawGameOver(buffer, this.width/2-150,this.height/2);
 			try {
-				Board.drawResults(buffer, nbp, 550, 400);
+				Board.drawResults(buffer, nbp, 550, 300);
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -134,14 +133,11 @@ public class Board extends Canvas {
 			playerScores.add(new Playerscore(player, player.getScore()));
 		}
 		Collections.sort(playerScores);
-		String player = "";
 		for(int i = 0; i<nbp; i++){
-			if(playerScores.get(nbp-i-1).player.getId()==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}
-			if(playerScores.get(nbp-i-1).player.getId()==1){ buffer.setColor(Color.pink); player = "nana";}
-			if(playerScores.get(nbp-i-1).player.getId()==2){ buffer.setColor(new Color(80,230,80)); player = "meme";}
-			if(playerScores.get(nbp-i-1).player.getId()==3){ buffer.setColor(new Color(200,200,80)); player = "lili";}
-			buffer.drawString((nbp-i)+"º: "+player + " Score: " + playerScores.get(nbp-i-1).score , x-100, y+disp);
-			disp -= 32;
+			int playerIndex = playerScores.get(i).player.getId();
+			buffer.setColor(colors[playerIndex]);
+			buffer.drawString((i+1)+"º: "+ names[playerIndex] + " Score: " + playerScores.get(i).score , x-100, y+disp);
+			disp += 32;
 		}
 	}
 }
