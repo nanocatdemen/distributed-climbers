@@ -3,6 +3,8 @@ package cl.uchile.dcc.cc5303;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 public class Gestor extends UnicastRemoteObject implements IGestor {
 
@@ -15,9 +17,11 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	int nbOfPlayers;
 	int nbOfBenches;
 	boolean pause = false;
+	CyclicBarrier barrier;
 	
 	
 	public Gestor(int players, int benches) throws RemoteException {
+		barrier = new CyclicBarrier(players);
 		taken = new ArrayList<Boolean>();
 		revanchaWanters = new ArrayList<Boolean>();
 		disconected = new ArrayList<>();
@@ -206,6 +210,11 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	@Override
 	public void setDisconected(ArrayList<Integer> disconected) {
 		this.disconected = disconected;
+	}
+
+	@Override
+	public void doAwait() throws InterruptedException, BrokenBarrierException {
+		this.barrier.await();
 	}
 
 }

@@ -8,6 +8,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
 
 import javax.swing.JFrame;
 
@@ -19,17 +20,12 @@ public class MainThread extends Thread {
 	private final static int WIDTH = 800, HEIGHT = 600;
 	private final static int UPDATE_RATE = 60;
 	private final static int DX = 5;
-	@SuppressWarnings("unused")
-	private final static double DV = 0.1;
 	private final static int framesToNewBench = 100;
-	@SuppressWarnings("unused")
-	private final double vy = 0.3;
 
 	private JFrame frame;
 	private Board tablero;
 	private IPlayer myPlayer;
 	private ArrayList<IPlayer> allPlayers;
-	//private ArrayList<IBench> allBenches;
 	private IBenchManager benchManager;
 	private IGestor gestor;
 	private IServer server;
@@ -43,13 +39,13 @@ public class MainThread extends Thread {
 
 		//Jugadores
 		allPlayers = new ArrayList<IPlayer>();
-		//allBenches = new ArrayList<IBench>();
 		try {
 			server = (IServer) Naming.lookup(urlServer + "server");
 			String activeServer= server.getActiveServer();
 			urlServer = activeServer;
 			server = (IServer) Naming.lookup(urlServer + "server");
 			gestor = (IGestor) Naming.lookup(urlServer + "gestor");
+
 			myID = gestor.giffPlayer();
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "player" + myID);
 			if(!myPlayer.isAlive())
@@ -61,7 +57,6 @@ public class MainThread extends Thread {
 		} catch (MalformedURLException | RemoteException | NotBoundException e1) {
 			e1.printStackTrace();
 		}
-
 		frame = new JFrame(TITLE);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -118,9 +113,9 @@ public class MainThread extends Thread {
 	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
+
 		try {
 			while(true){
-				System.out.println();
 				if(server.needMigrate().get(myID)) {
 					clientMigrate();
 				}
@@ -151,6 +146,7 @@ public class MainThread extends Thread {
 				//Check Game Over
 				tablero.isGameOver = false;
 				while(gestor.gameOver(allPlayers)) {
+					tablero.repaint();
 					tablero.isGameOver = true;
 					// Revancha?
 					if (keys[KeyEvent.VK_ENTER]) {
@@ -194,11 +190,9 @@ public class MainThread extends Thread {
 				}
 				if (keys[KeyEvent.VK_RIGHT]) {
 					server.movePlayerRight(myPlayer);
-//					myPlayer.moveRight();
 				}
 				if (keys[KeyEvent.VK_LEFT]) {
 					server.movePlayerLeft(myPlayer);
-//					myPlayer.moveLeft();
 				}
 				if(keys[KeyEvent.VK_P]) {
 					gestor.pause();
@@ -251,16 +245,16 @@ public class MainThread extends Thread {
 				}
 
 				tablero.repaint();
+
 				if(myPlayer.isAlive())
 					server.setPlayerScore(myPlayer,+1);
-				try {
-					Thread.sleep(200 / UPDATE_RATE);
-				} catch (InterruptedException ex) {
 
-				}
+				gestor.doAwait();
+				Thread.sleep(100 / UPDATE_RATE);
+
 			}
 		}
-		catch (RemoteException | MalformedURLException | NotBoundException e){
+		catch (RemoteException | MalformedURLException | NotBoundException | InterruptedException | BrokenBarrierException e){
 			e.printStackTrace();
 		}
 	}

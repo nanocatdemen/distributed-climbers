@@ -3,6 +3,7 @@ package cl.uchile.dcc.cc5303;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.concurrent.BrokenBarrierException;
 
 public interface IGestor extends Remote {
 
@@ -61,5 +62,7 @@ public interface IGestor extends Remote {
 	ArrayList<Integer> getDisconected() throws RemoteException;
 
 	void setDisconected(ArrayList<Integer> disconected) throws RemoteException;
+
+	void doAwait() throws InterruptedException, BrokenBarrierException, RemoteException;
 	
 }
