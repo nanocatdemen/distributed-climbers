@@ -67,7 +67,7 @@ public class MainThread extends Thread {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		tablero = new Board(WIDTH, HEIGHT, gestor.getNbOfPlayers());
-		tablero.players = allPlayers;
+		Board.players = allPlayers;
 		for(int i = 0; i < benchManager.nbOfBenches(); i++)
 			tablero.bases.add(benchManager.getBenches(i));
 
@@ -115,6 +115,7 @@ public class MainThread extends Thread {
 		}
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
 		try {
@@ -164,8 +165,8 @@ public class MainThread extends Thread {
 							continue;
 						} else {
 							gestor.doWait();
-							if (gestor.dedGaem()) {
-								System.out.println("ded gram");
+							if (gestor.isGameOver()) {
+								System.out.println("Juego terminado");
 								System.exit(0);
 							}
 							synchronized (gestor.getMutex()) {
@@ -180,7 +181,7 @@ public class MainThread extends Thread {
 						gestor.doNotifyAll();
 						System.exit(0);
 					}
-					if(gestor.dedGaem()){
+					if(gestor.isGameOver()){
 						System.exit(0);
 					}
 				}
@@ -189,13 +190,15 @@ public class MainThread extends Thread {
 
 				// Check controls
 				if (keys[KeyEvent.VK_UP]) {
-					myPlayer.jump();
+					server.makePlayerJump(myPlayer);
 				}
 				if (keys[KeyEvent.VK_RIGHT]) {
-					myPlayer.moveRight();
+					server.movePlayerRight(myPlayer);
+//					myPlayer.moveRight();
 				}
 				if (keys[KeyEvent.VK_LEFT]) {
-					myPlayer.moveLeft();
+					server.movePlayerLeft(myPlayer);
+//					myPlayer.moveLeft();
 				}
 				if(keys[KeyEvent.VK_P]) {
 					gestor.pause();
@@ -235,10 +238,10 @@ public class MainThread extends Thread {
 
 				for (IPlayer player: tablero.players){
 					if(myPlayer.pushPlayerRight(player)){
-						player.moveRight();
+						server.movePlayerRight(player);
 					}
 					else if(myPlayer.pushPlayerLeft(player)){
-						player.moveLeft();
+						server.movePlayerLeft(player);
 					}
 				}
 
@@ -249,7 +252,7 @@ public class MainThread extends Thread {
 
 				tablero.repaint();
 				if(myPlayer.isAlive())
-					myPlayer.setScore(myPlayer.getScore()+1);
+					server.setPlayerScore(myPlayer,+1);
 				try {
 					Thread.sleep(200 / UPDATE_RATE);
 				} catch (InterruptedException ex) {

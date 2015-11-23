@@ -129,18 +129,18 @@ public class Board extends Canvas {
 	static void drawResults(Graphics buffer, int nbp, int x, int y) throws RemoteException{
 		buffer.setFont(new Font("ComicSans", Font.PLAIN, 30));
 		int disp = 96;
-		ArrayList<Playerscore> asd = new ArrayList<Playerscore>();
+		ArrayList<Playerscore> playerScores = new ArrayList<Playerscore>();
 		for(IPlayer player:players){
-			asd.add(new Playerscore(player, player.getScore()));
+			playerScores.add(new Playerscore(player, player.getScore()));
 		}
-		Collections.sort(asd);
+		Collections.sort(playerScores);
 		String player = "";
 		for(int i = 0; i<nbp; i++){
-			if(asd.get(nbp-i-1).player.getId()==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}
-			if(asd.get(nbp-i-1).player.getId()==1){ buffer.setColor(Color.pink); player = "nana";}
-			if(asd.get(nbp-i-1).player.getId()==2){ buffer.setColor(new Color(80,230,80)); player = "meme";}
-			if(asd.get(nbp-i-1).player.getId()==3){ buffer.setColor(new Color(200,200,80)); player = "lili";}
-			buffer.drawString((nbp-i)+"º: "+player + " Score: " + asd.get(nbp-i-1).score , x-100, y+disp);
+			if(playerScores.get(nbp-i-1).player.getId()==0){ buffer.setColor(new Color(80,100,255)); player = "popo";}
+			if(playerScores.get(nbp-i-1).player.getId()==1){ buffer.setColor(Color.pink); player = "nana";}
+			if(playerScores.get(nbp-i-1).player.getId()==2){ buffer.setColor(new Color(80,230,80)); player = "meme";}
+			if(playerScores.get(nbp-i-1).player.getId()==3){ buffer.setColor(new Color(200,200,80)); player = "lili";}
+			buffer.drawString((nbp-i)+"º: "+player + " Score: " + playerScores.get(nbp-i-1).score , x-100, y+disp);
 			disp -= 32;
 		}
 	}

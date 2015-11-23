@@ -75,12 +75,10 @@ public class ServerThread extends Thread {
 			}
 			server.addBenchManager(manager, "benchManager");
 			server.addGestor(gestor, "gestor");
-			//server.serve();
 			// migrate data
 			server.migrateData(refServer);
 			server.serve();
 			server.setActive(false);
-			//System.out.println(((IPlayer) server.getObjects().get(0)).getLives());
 		} // means create 
 		else {
 			NB_OF_PLAYERS = Integer.parseInt(args[1]);

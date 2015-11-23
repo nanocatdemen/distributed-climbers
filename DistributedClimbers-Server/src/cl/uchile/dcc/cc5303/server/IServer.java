@@ -62,6 +62,14 @@ public interface IServer extends Remote {
 
 	public String getActiveServer() throws RemoteException, MalformedURLException, NotBoundException;
 
-	public IServer migrate(String string)throws RemoteException, MalformedURLException, NotBoundException;
+	public IServer migrate(String string) throws RemoteException, MalformedURLException, NotBoundException;
+
+	public void makePlayerJump(IPlayer myPlayer) throws RemoteException;
+
+	public void movePlayerRight(IPlayer myPlayer) throws RemoteException;
+
+	public void movePlayerLeft(IPlayer myPlayer) throws RemoteException;
+
+	public void setPlayerScore(IPlayer myPlayer, int i) throws RemoteException;
 
 }

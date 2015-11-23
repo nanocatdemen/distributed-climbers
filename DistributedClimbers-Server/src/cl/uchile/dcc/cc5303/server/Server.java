@@ -102,12 +102,10 @@ public class Server extends UnicastRemoteObject implements IServer {
 		}
 		IGestor gestor = this.gestor.get("gestor");
 		IGestor remoteGestor = sourceServer.getGestor("gestor");
-		gestor.setDead(remoteGestor.getDead());
-		gestor.setDedGaem(remoteGestor.isDedGaem());
+		gestor.setGameOver(remoteGestor.isGameOver());
 		gestor.setLock(remoteGestor.getLock());
 		gestor.setPause(remoteGestor.isPause());
 		gestor.setRevanchaWanters(remoteGestor.getRevanchaWanters());
-		gestor.setScore(remoteGestor.getScore());
 		gestor.setTaken(remoteGestor.getTaken());
 		gestor.setDisconected(remoteGestor.getDisconected());
 	}
@@ -258,5 +256,25 @@ public class Server extends UnicastRemoteObject implements IServer {
 		else
 			System.err.println("NO SE ENCONTRARON SERVIDORES PARA MIGRAR");
 		return this;
+	}
+
+	@Override
+	public void makePlayerJump(IPlayer player) throws RemoteException {
+		player.jump();
+	}
+
+	@Override
+	public void movePlayerRight(IPlayer player) throws RemoteException {
+		player.moveRight();		
+	}
+
+	@Override
+	public void movePlayerLeft(IPlayer player) throws RemoteException {
+		player.moveLeft();
+	}
+
+	@Override
+	public void setPlayerScore(IPlayer player, int scoreDiference) throws RemoteException {
+		player.setScore(player.getScore() + scoreDiference);		
 	}
 }

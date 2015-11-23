@@ -26,13 +26,7 @@ public interface IGestor extends Remote {
 
 	void resetGame(ArrayList<IPlayer> allPlayers, IBenchManager benchManager) throws RemoteException;
 	
-	boolean dedGaem() throws RemoteException;
-	
 	void weLost(int i) throws RemoteException;
-
-	void resetScore() throws RemoteException;
-
-	int[] getResults() throws RemoteException;
 	
 	Mutex getMutex() throws RemoteException;
 	
@@ -46,21 +40,13 @@ public interface IGestor extends Remote {
 
 	boolean isPause() throws RemoteException;
 
-	void setDead(int dead) throws RemoteException;
-
-	int getDead() throws RemoteException;
-
-	void setScore(int[] score) throws RemoteException;
-
-	int[] getScore() throws RemoteException;
-
 	void setLock(Mutex lock) throws RemoteException;
 
 	Mutex getLock() throws RemoteException;
 
-	void setDedGaem(boolean dedGaem) throws RemoteException;
+	void setGameOver(boolean dedGaem) throws RemoteException;
 
-	boolean isDedGaem() throws RemoteException;
+	boolean isGameOver() throws RemoteException;
 
 	void setRevanchaWanters(ArrayList<Boolean> revanchaWanters) throws RemoteException;
 
