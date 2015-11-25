@@ -131,6 +131,7 @@ public class MainThread extends Thread {
 				}
 			}
 			while (true) { // Main loop
+
 				if(server.needMigrate().get(myID)) {
 					clientMigrate();
 				}
@@ -141,6 +142,7 @@ public class MainThread extends Thread {
 					if(keys[KeyEvent.VK_P]) {
 						gestor.resume();
 						tablero.repaint();
+						Thread.sleep(100);
 					}
 				}
 				//Check Game Over
@@ -196,6 +198,7 @@ public class MainThread extends Thread {
 				}
 				if(keys[KeyEvent.VK_P]) {
 					gestor.pause();
+					Thread.sleep(100);
 				}
 				if(keys[KeyEvent.VK_Q]) {
 					server.deletePlayer(myID);
@@ -245,11 +248,13 @@ public class MainThread extends Thread {
 				}
 
 				tablero.repaint();
-
+				if(!gestor.isPause()){
+					gestor.doAwait();
+				}
 				if(myPlayer.isAlive())
 					server.setPlayerScore(myPlayer,+1);
 
-				gestor.doAwait();
+
 				Thread.sleep(100 / UPDATE_RATE);
 
 			}
