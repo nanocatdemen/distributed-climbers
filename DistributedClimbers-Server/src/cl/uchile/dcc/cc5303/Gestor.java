@@ -13,7 +13,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	ArrayList<Integer> disconected;
 	ArrayList<Boolean> revanchaWanters;
 	boolean gameOver = false;
-	protected IMutex lock;
+	protected Mutex lock;
 	int nbOfPlayers;
 	int nbOfBenches;
 	boolean pause = false;
@@ -128,7 +128,7 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	}
 
 	@Override
-	public IMutex getMutex() throws RemoteException {
+	public Mutex getMutex() throws RemoteException {
 		return lock;
 	}
 
@@ -178,12 +178,12 @@ public class Gestor extends UnicastRemoteObject implements IGestor {
 	}
 
 	@Override
-	public IMutex getLock() {
+	public Mutex getLock() {
 		return lock;
 	}
 
 	@Override
-	public void setLock(IMutex lock) {
+	public void setLock(Mutex lock) {
 		this.lock = lock;
 	}
 

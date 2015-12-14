@@ -110,17 +110,18 @@ public class ServerThread extends Thread {
 					server = server.migrate("SOBRECARGA");
 				}
 				Thread.sleep(1000);
-			} catch (RemoteException | InterruptedException | MalformedURLException | NotBoundException e) {
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			for(int i = 0; i < NB_OF_PLAYERS; i++) {
-				try {
-					Naming.lookup(URLSERVER + "playerVivo" + i);
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
-				} catch (RemoteException | NotBoundException e) {
-					System.out.println("No está el jugador " + i);
-				}
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NotBoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
