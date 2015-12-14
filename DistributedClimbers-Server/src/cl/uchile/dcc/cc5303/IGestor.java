@@ -29,7 +29,7 @@ public interface IGestor extends Remote {
 	
 	void weLost(int i) throws RemoteException;
 	
-	Mutex getMutex() throws RemoteException;
+	IMutex getMutex() throws RemoteException;
 	
 	void pause() throws RemoteException;
 	
@@ -41,9 +41,9 @@ public interface IGestor extends Remote {
 
 	boolean isPause() throws RemoteException;
 
-	void setLock(Mutex lock) throws RemoteException;
+	void setLock(IMutex lock) throws RemoteException;
 
-	Mutex getLock() throws RemoteException;
+	IMutex getLock() throws RemoteException;
 
 	void setGameOver(boolean dedGaem) throws RemoteException;
 

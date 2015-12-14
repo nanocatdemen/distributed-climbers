@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -47,6 +48,8 @@ public class MainThread extends Thread {
 			gestor = (IGestor) Naming.lookup(urlServer + "gestor");
 
 			myID = gestor.giffPlayer();
+			IMutex m = new Mutex();
+			Naming.rebind(urlServer + "playerVivo" + myID, m);
 			myPlayer = (IPlayer) Naming.lookup(urlServer + "player" + myID);
 			if(!myPlayer.isAlive())
 				myPlayer.reset();
